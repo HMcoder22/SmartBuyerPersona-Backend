@@ -1,6 +1,6 @@
 const express = require("express");
 const serverless = require("serverless-http");
-
+const cors = require('cors');
 const app = express();
 const router = express.Router();
 
@@ -36,6 +36,7 @@ router.post("/", (req, res) => {
     res.json(data);
 });
 
+app.use(cors());
 app.use(`/.netlify/functions/api`, router);
 
 module.exports = app;
