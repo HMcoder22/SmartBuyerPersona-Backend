@@ -6,6 +6,13 @@ const router = express.Router();
 
 router.post("/", (req, res) => {
     const data = req.body;
+
+    res.header = {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': true
+    }
+    res.statusCode = 200;
+    
     data.headers = {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': true
