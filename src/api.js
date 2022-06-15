@@ -26,6 +26,7 @@ router.get("/", (req, res) => {
 });
 
 app.use(cors());
+app.use(express.json());
 app.use(`/.netlify/functions/api`, router);
 
 module.exports = app;
