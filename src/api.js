@@ -5,7 +5,7 @@ const app = express();
 
 const router = express.Router();
 
-router.post('/api', (req, res) =>{
+router.get('/api', (req, res) =>{
     res.json({
         'hello': 'hi'
     });
