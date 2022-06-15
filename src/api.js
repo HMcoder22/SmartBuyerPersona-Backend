@@ -5,18 +5,6 @@ const app = express();
 const router = express.Router();
 
 router.post("/", (req, res) => {
-    res.header = {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true
-    }
-    res.statusCode = 200;
-
-    req.header = {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true
-    };
-    req.statusCode = 200;
-
     const data = req.body;
     if(data.gender === undefined || data.gender === ''){
         data.error = 'empty_gender'        
