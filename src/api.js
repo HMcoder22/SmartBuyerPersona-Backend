@@ -6,6 +6,7 @@ const router = express.Router();
 
 router.get("/", (req, res) => {
     const data = req.body;
+    console.log("hello");
     if(data.gender === undefined || data.gender === ''){
         data.error = 'empty_gender'        
         res.json(data);
