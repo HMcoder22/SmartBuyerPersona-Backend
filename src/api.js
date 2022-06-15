@@ -4,7 +4,7 @@ const cors = require('cors');
 const app = express();
 const router = express.Router();
 
-router.post("/", (req, res) => {
+router.get("/", (req, res) => {
     const data = req.body;
     if(data.gender === undefined || data.gender === ''){
         data.error = 'empty_gender'        
