@@ -4,6 +4,9 @@ const cors = require('cors');
 const app = express();
 const router = express.Router();
 
+app.use(cors());
+app.use(express.json({limit: '50mb'}));
+
 router.get("/", (req, res) => {
     const data = req.body;
     console.log("hello");
@@ -25,8 +28,6 @@ router.get("/", (req, res) => {
     res.json(data);
 });
 
-app.use(cors());
-app.use(express.json());
 app.use(`/.netlify/functions/api`, router);
 
 module.exports = app;
