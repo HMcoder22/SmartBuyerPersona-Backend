@@ -4,13 +4,12 @@ const cors = require('cors');
 const app = express();
 const router = express.Router();
 const state_occupation = require('../datasets/states_occupation.json');
-const age_occupation = require('../datasets/median_age_occupations.json');
 
 app.use(cors());
 app.use(express.json({limit: '50mb'}));
 
-// Get data from '/api' post request
-app.post("/", function(req, res){
+// Get data from '/' post request
+router.post("/", function(req, res){
     res.json(validateInput(req.body));
 })
 
