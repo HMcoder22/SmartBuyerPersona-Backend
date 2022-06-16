@@ -7,9 +7,8 @@ const router = express.Router();
 app.use(cors());
 app.use(express.json({limit: '50mb'}));
 
-router.get("/", (req, res) => {
+router.post("/", (req, res) => {
     const data = req.body;
-    console.log("hello");
     if(data.gender === undefined || data.gender === ''){
         data.error = 'empty_gender'        
         res.json(data);
