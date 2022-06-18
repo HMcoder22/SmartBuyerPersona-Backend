@@ -12,7 +12,7 @@ const { retrieveMultiData } = require("./database_tools");
 app.use(cors());
 app.use(express.json({limit: '50mb'}));
 
-async function getData(state){
+async function getData(){
     const uri = "mongodb+srv://billtrancon12:LiamNgoan%40123@testing.76czn3k.mongodb.net/?retryWrites=true&w=majority";
     const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
     try{
@@ -29,7 +29,7 @@ async function getData(state){
 
 // Get data from '/' post request
 router.post("/",  async function(req, res){
-    await getData(req.body.state);
+    await getData();
     res.json(validateInput(req.body));
 })
 
