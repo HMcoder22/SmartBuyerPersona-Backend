@@ -4,32 +4,15 @@ const cors = require('cors');
 const app = express();
 const router = express.Router();
 const state_occupation = require('../datasets/states_occupation.json');
-// var state_occupation = [];
-const {MongoClient} = require("mongodb");
-const { retrieveMultiData } = require("./database_tools");
 
 
 app.use(cors());
 app.use(express.json({limit: '50mb'}));
 
-async function getData(){
-    const uri = "mongodb+srv://billtrancon12:LiamNgoan%40123@testing.76czn3k.mongodb.net/?retryWrites=true&w=majority";
-    const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-    try{
-        await client.connect();
-        await retrieveMultiData(client, "Persona", "Persona", {state: "Texas"});
-    }
-    catch(err){
-        console.error(err);
-    }
-    finally{
-        await client.close();
-    }
-}
+
 
 // Get data from '/' post request
 router.post("/",  async function(req, res){
-    await getData();
     res.json(validateInput(req.body));
 })
 
