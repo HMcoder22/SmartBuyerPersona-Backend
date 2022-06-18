@@ -29,6 +29,7 @@ router.post("/", function(req, res){
     res.json(validateInput(req.body));
 })
 
+getData().catch(console.error);
 
 function validateInput(data){
     // Check if the input for gender is empty
