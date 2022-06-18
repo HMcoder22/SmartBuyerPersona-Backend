@@ -48,8 +48,14 @@ module.exports.retrieveData = async function retrieveData(client, dbname, colnam
  * @returns {Object} a cursor to the list of documents -> to make it readable convert cursor.toArray()
  */
 module.exports.retrieveMultiData = async function retrieveMultiData(client, dbname, colname, query){
-    const cursor = await client.db(dbname).collection(colname).find(query);
-    return cursor;
+    const cursor = await client.db(dbname).collection(colname).find(query).toArray();
+    return {
+        statusCode: 200,
+        headers:{
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(cursor)
+    };
 }
 
 
