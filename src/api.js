@@ -25,11 +25,11 @@ async function getData(){
 }
 
 // Get data from '/' post request
-router.post("/", function(req, res){
+router.post("/",  async function(req, res){
+    await getData();
     res.json(validateInput(req.body));
 })
 
-getData().catch(console.error);
 
 function validateInput(data){
     // Check if the input for gender is empty
