@@ -4,38 +4,38 @@ const cors = require('cors');
 const app = express();
 const router = express.Router();
 const state_occupation = require('../datasets/states_occupation.json');
-const {MongoClient} = require('mongodb');
-const {retrieveMultiData} = require('./database_tools.js');
+// const {MongoClient} = require('mongodb');
+// const {retrieveMultiData} = require('./database_tools.js');
 
-async function getData(state){
-    const uri = "mongodb+srv://billtrancon12:LiamNgoan%40123@testing.76czn3k.mongodb.net/?retryWrites=true&w=majority"
-    const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+// async function getData(state){
+//     const uri = "mongodb+srv://billtrancon12:LiamNgoan%40123@testing.76czn3k.mongodb.net/?retryWrites=true&w=majority"
+//     const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
-    try{
-        await client.connect();
-        const result = await retrieveMultiData(client, "Persona", "Persona", {state: state});
-        const arr = await result.toArray();
-        await client.close();
-        return arr;
-    }
-    catch(err){
-        console.error(err);
-        return undefined;
-    }
-}
+//     try{
+//         await client.connect();
+//         const result = await retrieveMultiData(client, "Persona", "Persona", {state: state});
+//         const arr = await result.toArray();
+//         await client.close();
+//         return arr;
+//     }
+//     catch(err){
+//         console.error(err);
+//         return undefined;
+//     }
+// }
 
 app.use(express.json({limit: '50mb'}));
-
-app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT,DELETE");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-    next();
-});
+app.use(cors());
+// app.use(function (req, res, next) {
+//     res.header("Access-Control-Allow-Origin", "*");
+//     res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT,DELETE");
+//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+//     next();
+// });
 
 // Get data from '/' post request
 router.post("/",  async function(req, res){
-    await getData("Texas");
+    // await getData("Texas");
     res.json(validateInput(req.body));
 })
 
