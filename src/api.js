@@ -5,6 +5,7 @@ const app = express();
 const router = express.Router();
 const state_occupation = require('../datasets/states_occupation.json');
 const {MongoClient} = require("mongodb");
+const { retrieveMultiData } = require("./database_tools");
 
 
 app.use(cors());
@@ -15,6 +16,7 @@ async function getData(){
     const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
     try{
         client.connect();
+        await retrieveMultiData(client, "Persona", "Persona", {state: "Texas"});
     }
     catch(err){
         console.error(err);
