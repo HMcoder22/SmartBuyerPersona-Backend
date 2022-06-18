@@ -16,19 +16,22 @@ async function getData(state){
     const uri = "mongodb+srv://billtrancon12:LiamNgoan%40123@testing.76czn3k.mongodb.net/?retryWrites=true&w=majority";
     const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
     try{
-        client.connect();
+        await client.connect();
         await retrieveMultiData(client, "Persona", "Persona", {state: "Texas"});
     }
     catch(err){
         console.error(err);
     }
     finally{
-        client.close();
+        await client.close();
     }
 }
 
 // Get data from '/' post request
 router.post("/",  async function(req, res){
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT,DELETE");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
     await getData(req.body.state).then((e) => {state_occupation = e}).catch((err) => console.log(err));
     res.json(validateInput(req.body));
 })
