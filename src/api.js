@@ -3,33 +3,13 @@ const serverless = require("serverless-http");
 const cors = require('cors');
 const app = express();
 const router = express.Router();
-var state_occupation = [];
-const {MongoClient} = require("mongodb");
-const retrieveMultiData = require('./database_tools.js');
+const state_occupation = require('../datasets/states_occupation.json');
 
 app.use(cors());
 app.use(express.json({limit: '50mb'}));
 
-async function getData(state){
-    const uri = "mongodb+srv://billtrancon12:LiamNgoan%40123@testing.76czn3k.mongodb.net/?retryWrites=true&w=majority"
-    const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-
-    try{
-        await client.connect();
-        const result = await retrieveMultiData(client, "Persona", "Persona", {state: state});
-        const arr = await result.toArray();
-        await client.close();
-        return arr;
-    }
-    catch(err){
-        console.error(err);
-        return undefined;
-    }
-}
-
 // Get data from '/' post request
-router.post("/", async function(req, res){
-    await getData(req.body.state).then(e => {state_occupation = e}).catch(console.error);
+router.post("/", function(req, res){
     res.json(validateInput(req.body));
 })
 
