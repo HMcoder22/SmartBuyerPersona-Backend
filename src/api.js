@@ -3,8 +3,8 @@ const serverless = require("serverless-http");
 const cors = require('cors');
 const app = express();
 const router = express.Router();
-// const state_occupation = require('../datasets/states_occupation.json');
-var state_occupation = [];
+const state_occupation = require('../datasets/states_occupation.json');
+// var state_occupation = [];
 const {MongoClient} = require("mongodb");
 const { retrieveMultiData } = require("./database_tools");
 
@@ -29,10 +29,7 @@ async function getData(state){
 
 // Get data from '/' post request
 router.post("/",  async function(req, res){
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT,DELETE");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-    await getData(req.body.state).then((e) => {state_occupation = e}).catch((err) => console.log(err));
+    await getData(req.body.state);
     res.json(validateInput(req.body));
 })
 
