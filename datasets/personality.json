@@ -1,0 +1,307 @@
+{
+    "infp-t":{
+        "career":[
+            "artist",
+            "counselor",
+            "graphic designer",
+            "librarian",
+            "psychologist",
+            "physical therapist",
+            "social worker",
+            "writer"
+        ],
+        "trait":[
+            "creative",
+            "caring",
+            "driven",
+            "idealistic",
+            "hardworking",
+            "introverted"
+        ]
+    },
+    "enfp-t":{
+        "career":[
+            "psychologist",
+            "journalist",
+            "actor",
+            "tv anchor",
+            "tv reporter",
+            "nutritionist",
+            "nurse",
+            "social worker",
+            "politician",
+            "counselor"
+        ],
+        "trait":[
+            "warm",
+            "enthusiastic",
+            "spontaneous",
+            "inovative",
+            "creative",
+            "extroverted"
+        ]
+    },    
+    "estj-a":{
+        "career":[
+            "police officer",
+            "military",
+            "judge",
+            "politician",
+            "teacher",
+            "school administrator",
+            "business manager",
+            "accountant",
+            "engineer",
+            "banker"
+        ],
+        "trait":[
+            "realistic",
+            "leadership",
+            "logical",
+            "hardworking",
+            "extroverted",
+            "confident"
+        ]
+    },
+    "esfj-a":{
+        "career":[
+            "childcare",
+            "nursing",
+            "teaching",
+            "social work",
+            "counseling",
+            "physician",
+            "receptionist",
+            "bookkeeper",
+            "office manager"
+        ],
+        "trait":[
+            "caring",
+            "outgoing",
+            "sensitive",
+            "organized",
+            "practical",
+            "extroverted"
+        ]
+    },
+    "esfp-t":{
+        "career":[
+            "artist",
+            "actor",
+            "counselor",
+            "social worker",
+            "athletic coach",
+            "child care provider",
+            "musician",
+            "psychologist",
+            "human resources specialist",
+            "fashion designer"
+        ],
+        "trait":[
+            "optimistic",
+            "extroverted",
+            "focused",
+            "practical",
+            "impulsive",
+            "spontaneous"
+        ]
+    },
+    "enfj-t":{
+        "career":[
+            "counselor",
+            "teacher",
+            "psychologist",
+            "social worker",
+            "human resources manager",
+            "sales representative",
+            "manager"
+        ],
+        "trait":[
+            "warm",
+            "outgoing",
+            "loyal",
+            "sensitive",
+            "extroverted",
+            "organized"
+        ]
+    },
+    "istj-t":{
+        "career":[
+            "accountant",
+            "computer programmer",
+            "dentist",
+            "doctor",
+            "librarian",
+            "lawyer",
+            "police officer or detective",
+            "military leader"
+        ],
+        "trait":[
+            "detail-oriented",
+            "judgmental",
+            "logical",
+            "observant",
+            "practical",
+            "introverted"           
+        ]
+    },
+    "estp-t":{
+        "career":[
+            "computer support technician",
+            "detectives",
+            "entrepreneur",
+            "marketer",
+            "paramedic",
+            "police officer",
+            "sales agent"
+        ],
+        "trait":[
+            "logical",
+            "observant",
+            "resourceful",
+            "action-oriented",
+            "extroverted",
+            "adaptable",
+            "persuasive",
+            "competitive"
+        ]
+    },
+    "intp-t":{
+        "career":[
+            "chemist",
+            "physicist",
+            "computer programmer",
+            "forensic scientist",
+            "engineer",
+            "mathematician",
+            "pharmacist",
+            "software developer",
+            "geologist"
+        ],
+        "trait":[
+            "logical",
+            "abstract thinker",
+            "independent",
+            "loyal",
+            "insensitive",
+            "introverted",
+            "doubtful"
+        ]
+    },
+    "entp-t":{
+        "career":[
+            "engineer",
+            "lawyer",
+            "scientist",
+            "psychologist",
+            "inventor",
+            "psychiatrist",
+            "journalist"
+        ],
+        "trait":[
+            "innovative",
+            "creative",
+            "extroverted",
+            "argumentative",
+            "open minded",
+            "knowledgable",
+            "logical"
+        ]
+    },
+    "isfj-t":{
+        "career":[
+            "accountant",
+            "administrator",
+            "banker",
+            "bookkeeper",
+            "child care provider",
+            "counselor",
+            "nurse",
+            "office manager",
+            "paralegal",
+            "social worker",
+            "teacher"
+        ],
+        "trait":[
+            "reliable",
+            "introverted",
+            "sensitive",
+            "practical",
+            "detail-oriented",
+            "dislikes change"
+        ]
+    },
+    "entj-t":{
+        "career":[
+            "human resources manager",
+            "company ceo or manager",
+            "lawyer",
+            "scientist",
+            "software developer",
+            "business analyst",
+            "entrepreneur",
+            "university professor"
+        ],
+        "trait":[
+            "extroverted",
+            "leadership",
+            "organized",
+            "confident",
+            "impatient",
+            "assertive",
+            "good descision making",
+            "insensitive"
+        ]
+    },    
+    "istp-t":{
+        "career":[
+            "forensic science",
+            "engineering",
+            "mechanics",
+            "computer programming",
+            "carpentry",
+            "law enforcement",
+            "software engineer",
+            "photographer",
+            "physical therapist",
+            "scientist",
+            "pilot",
+            "firefighter"
+        ],
+        "trait":[
+            "introverted",
+            "logical",
+            "realistic",
+            "practical",
+            "confident",
+            "insensitive",
+            "action-oriented",
+            "risk taker"
+        ]
+    },    
+    "isfp-t":{
+        "career":[
+            "artist",
+            "composer or musician",
+            "chef",
+            "designer",
+            "forest ranger",
+            "nurse",
+            "naturalist",
+            "pediatrician",
+            "psychologist",
+            "social worker",
+            "teacher",
+            "veterinarian"
+        ],
+        "trait":[
+            "introverted",
+            "practical",
+            "loyal",
+            "needs personal space",
+            "reserved",
+            "caring",
+            "action-oriented"
+        ]
+    }
+}
