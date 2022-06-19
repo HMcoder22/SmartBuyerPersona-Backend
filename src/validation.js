@@ -16,9 +16,8 @@ async function getData(state){
     try{
         await client.connect();
         const result = await retrieveMultiData(client, "Persona", "Persona", {state: state});
-        const arr = await result.toArray();
         await client.close();
-        return arr;
+        return JSON.parse(result.body);
     }
     catch(err){
         console.error(err);
@@ -60,16 +59,13 @@ function validateInput(data){
     }
 
     data.income = 0;
-    // Get the income for the specific job in the specific state
-    for(let i = 0; i < state_occupation.length; i++){
-        if(state_occupation[i].state === data.state){
-            for(let j = 0; j < state_occupation[i].occupation.length; j++){
-                if(state_occupation[i].occupation[j].job === data.occupation){
-                    data.income = state_occupation[i].occupation[j].income;
-                }
-            }
+
+    for(let i = 0; i < state_occupation[0].occupation.length; i++){
+        if(state_occupation[0].occupation[i].job === data.occupation){
+            data.income = state_occupation[0].occupation[i].income;
         }
     }
+
 
     if(data.income === 0){
         data.error = 'job_unavailable';

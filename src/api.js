@@ -3,7 +3,8 @@ const serverless = require("serverless-http");
 const cors = require('cors');
 const app = express();
 const router = express.Router();
-const state_occupation = require('../datasets/states_occupation.json');
+// const state_occupation = require('../datasets/states_occupation.json');
+var state_occupation = [];
 const {MongoClient} = require('mongodb');
 const {retrieveMultiData} = require('./database_tools.js');
 
@@ -14,9 +15,8 @@ async function getData(state){
     try{
         await client.connect();
         const result = await retrieveMultiData(client, "Persona", "Persona", {state: state});
-        const arr = await result.toArray();
         await client.close();
-        return arr;
+        return JSON.parse(result.body);
     }
     catch(err){
         console.error(err);
@@ -35,7 +35,7 @@ app.use(function (req, res, next) {
 
 // Get data from '/' post request
 router.post("/",  async function(req, res){
-    await getData("Texas");
+    await getData(req.body.state).then(e => {state_occupation = e}).catch(console.error);
     res.json(validateInput(req.body));
 })
 
@@ -68,13 +68,9 @@ function validateInput(data){
 
     data.income = 0;
     // Get the income for the specific job in the specific state
-    for(let i = 0; i < state_occupation.length; i++){
-        if(state_occupation[i].state === data.state){
-            for(let j = 0; j < state_occupation[i].occupation.length; j++){
-                if(state_occupation[i].occupation[j].job === data.occupation){
-                    data.income = state_occupation[i].occupation[j].income;
-                }
-            }
+    for(let i = 0; i < state_occupation[0].occupation.length; i++){
+        if(state_occupation[0].occupation[i].job === data.occupation){
+            data.income = state_occupation[0].occupation[i].income;
         }
     }
 

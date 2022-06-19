@@ -8,7 +8,13 @@
  */
 module.exports.putData = async function putData(client, dbname, colname, data){
     const result = await client.db(dbname).collection(colname).insertOne(data);
-    return result;
+    return {
+        statusCode: 200,
+        headers:{
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(result)
+    };
 }
 
 /**
@@ -21,7 +27,13 @@ module.exports.putData = async function putData(client, dbname, colname, data){
  */
 module.exports.putManyData = async function putManyData(client, dbname, colname, listData){
     const result = await client.db(dbname).collection(colname).insertMany(listData);
-    return result;
+    return {
+        statusCode: 200,
+        headers:{
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(result)
+    };
 }
 
 
@@ -35,7 +47,13 @@ module.exports.putManyData = async function putManyData(client, dbname, colname,
  */
 module.exports.retrieveData = async function retrieveData(client, dbname, colname, query){
     const cursor = await client.db(dbname).collection(colname).findOne(query);
-    return cursor;
+    return {
+        statusCode: 200,
+        headers:{
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(cursor)
+    };
 }
 
 
@@ -71,7 +89,13 @@ module.exports.retrieveMultiData = async function retrieveMultiData(client, dbna
  */
 module.exports.updateData = async function updateData(client, dbname, colname, queryFind, data, upsert){
     const result = await client.db(dbname).collection(colname).updateOne(queryFind, data, upsert);
-    return result;
+    return {
+        statusCode: 200,
+        headers:{
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(result)
+    };
 }
 
 
@@ -87,7 +111,13 @@ module.exports.updateData = async function updateData(client, dbname, colname, q
  */
  module.exports.updateData = async function updateData(client, dbname, colname, queryFind, data, upsert){
     const result = await client.db(dbname).collection(colname).updateMany(queryFind, data, upsert);
-    return result;
+    return {
+        statusCode: 200,
+        headers:{
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(result)
+    };
 }
 
 
@@ -101,7 +131,13 @@ module.exports.updateData = async function updateData(client, dbname, colname, q
  */
 module.exports.deleteData = async function deleteData(client, dbname, colname, query){
     const result = await client.db(dbname).collection(colname).deleteOne(query);
-    return result;
+    return {
+        statusCode: 200,
+        headers:{
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(result)
+    };
 }
 
 
@@ -115,5 +151,11 @@ module.exports.deleteData = async function deleteData(client, dbname, colname, q
  */
 module.exports.deleteManyData = async function deleteManyData(client, dbname, colname, query){
     const result = await client.db(dbname).collection(colname).deleteMany(query);
-    return result;
+    return {
+        statusCode: 200,
+        headers:{
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(result)
+    };
 }
