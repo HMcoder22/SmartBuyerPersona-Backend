@@ -5,7 +5,7 @@ const app = express();
 const router = express.Router();
 var state_occupation = [];
 const {MongoClient} = require('mongodb');
-const {retrieveMultiData} = require('./database_tools.js');
+const {retrieveData} = require('./database_tools.js');
 
 async function getData(state){
     const uri = "mongodb+srv://billtrancon12:LiamNgoan%40123@testing.76czn3k.mongodb.net/?retryWrites=true&w=majority"
@@ -68,7 +68,8 @@ function validateInput(data){
     data.income = 0;
     if(state_occupation[data.state.toLowerCase()][data.occupation.toLowerCase()] !== undefined)
         data.income = state_occupation[data.state.toLowerCase()][data.occupation.toLowerCase()][0];
-    // Get the income for the specific job in the specific state
+    
+        // Get the income for the specific job in the specific state
     // for(let i = 0; i < state_occupation[0].occupation.length; i++){
     //     if(state_occupation[0].occupation[i].job === data.occupation){
     //         data.income = state_occupation[0].occupation[i].income;
