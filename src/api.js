@@ -66,15 +66,15 @@ function validateInput(data){
         return data;
     }
 
-    data.income = 0;
+    data.income = state_occupation[data.state][data.occupation][0];
     // Get the income for the specific job in the specific state
-    for(let i = 0; i < state_occupation[0].occupation.length; i++){
-        if(state_occupation[0].occupation[i].job === data.occupation){
-            data.income = state_occupation[0].occupation[i].income;
-        }
-    }
+    // for(let i = 0; i < state_occupation[0].occupation.length; i++){
+    //     if(state_occupation[0].occupation[i].job === data.occupation){
+    //         data.income = state_occupation[0].occupation[i].income;
+    //     }
+    // }
 
-    if(data.income === 0){
+    if(data.income === undefined){
         data.error = 'job_unavailable';
         return data;
     }
