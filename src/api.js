@@ -13,7 +13,7 @@ async function getData(state){
 
     try{
         await client.connect();
-        const result = await retrieveMultiData(client, "Persona", "Persona", {state: state});
+        const result = await retrieveData(client, "Persona", "Persona", {state: state});
         await client.close();
         return JSON.parse(result.body);
     }
@@ -67,7 +67,7 @@ function validateInput(data){
 
     data.income = 0;
     if(state_occupation[data.state.toLowerCase()][data.occupation.toLowerCase()] !== undefined)
-        data.income = state_occupation[data.state.toLowerCase()][data.occupation.toLowerCase][0];
+        data.income = state_occupation[data.state.toLowerCase()][data.occupation.toLowerCase()][0];
     // Get the income for the specific job in the specific state
     // for(let i = 0; i < state_occupation[0].occupation.length; i++){
     //     if(state_occupation[0].occupation[i].job === data.occupation){
