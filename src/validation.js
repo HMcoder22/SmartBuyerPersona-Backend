@@ -1,8 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const app = express();
-var state_occupation = [];
-const {retrieveMultiData} = require('./database_tools.js');
+var state_occupation = {};
+const {retrieveData} = require('./database_tools.js');
 const {MongoClient} = require('mongodb');
 
 app.use(cors());
@@ -15,7 +15,7 @@ async function getData(state){
 
     try{
         await client.connect();
-        const result = await retrieveMultiData(client, "Persona", "Persona", {state: state});
+        const result = await retrieveData(client, "Persona", "Persona", {[state.toLowerCase()]: {$exists: true}});
         await client.close();
         return JSON.parse(result.body);
     }
@@ -59,13 +59,9 @@ function validateInput(data){
     }
 
     data.income = 0;
-
-    for(let i = 0; i < state_occupation[0].occupation.length; i++){
-        if(state_occupation[0].occupation[i].job === data.occupation){
-            data.income = state_occupation[0].occupation[i].income;
-        }
+    if(state_occupation[data.state.toLowerCase()][data.occupation.toLowerCase()] !== undefined){
+        data.income = state_occupation[data.state.toLowerCase()][data.occupation.toLowerCase()][0];
     }
-
 
     if(data.income === 0){
         data.error = 'job_unavailable';

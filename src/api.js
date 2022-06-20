@@ -3,7 +3,6 @@ const serverless = require("serverless-http");
 const cors = require('cors');
 const app = express();
 const router = express.Router();
-// const state_occupation = require('../datasets/states_occupation.json');
 var state_occupation = [];
 const {MongoClient} = require('mongodb');
 const {retrieveMultiData} = require('./database_tools.js');
@@ -66,7 +65,9 @@ function validateInput(data){
         return data;
     }
 
-    data.income = state_occupation[data.state][data.occupation][0];
+    data.income = 0;
+    if(state_occupation[data.state.toLowerCase()][data.occupation.toLowerCase()] !== undefined)
+        data.income = state_occupation[data.state.toLowerCase()][data.occupation.toLowerCase][0];
     // Get the income for the specific job in the specific state
     // for(let i = 0; i < state_occupation[0].occupation.length; i++){
     //     if(state_occupation[0].occupation[i].job === data.occupation){
