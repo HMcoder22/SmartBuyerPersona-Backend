@@ -13,7 +13,7 @@ async function getData(state){
 
     try{
         await client.connect();
-        const result = await retrieveData(client, "Persona", "Persona", {[state.toLowerCase()]: {$exists: true}});
+        const result = await retrieveData(client, "Persona", "Persona_detail", {state: state, "occupation.job": job});
         await client.close();
         return JSON.parse(result.body);
     }
