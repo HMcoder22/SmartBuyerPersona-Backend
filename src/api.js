@@ -3,11 +3,11 @@ const serverless = require("serverless-http");
 const cors = require('cors');
 const app = express();
 const router = express.Router();
-var state_occupation = [];
+var persona = [];
 const {MongoClient} = require('mongodb');
 const {retrieveData} = require('./database_tools.js');
 
-async function getData(state){
+async function getData(state, job){
     const uri = "mongodb+srv://billtrancon12:LiamNgoan%40123@testing.76czn3k.mongodb.net/?retryWrites=true&w=majority"
     const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
@@ -34,7 +34,7 @@ app.use(function (req, res, next) {
 
 // Get data from '/' post request
 router.post("/",  async function(req, res){
-    await getData(req.body.state).then(e => {state_occupation = e}).catch(console.error);
+    await getData(req.body.state, req.body.occupation).then(e => {persona = e}).catch(console.error);
     res.json(validateInput(req.body));
 })
 
@@ -66,19 +66,22 @@ function validateInput(data){
     }
 
     data.income = 0;
-    if(state_occupation[data.state.toLowerCase()][data.occupation.toLowerCase()] !== undefined)
-        data.income = state_occupation[data.state.toLowerCase()][data.occupation.toLowerCase()][0];
-    
-        // Get the income for the specific job in the specific state
-    // for(let i = 0; i < state_occupation[0].occupation.length; i++){
-    //     if(state_occupation[0].occupation[i].job === data.occupation){
-    //         data.income = state_occupation[0].occupation[i].income;
-    //     }
-    // }
+    if(persona !== null){
+        data.income = persona.occupation.income;
+    }
 
-    if(data.income === undefined){
+    if(data.income === 0){
         data.error = 'job_unavailable';
         return data;
+    }
+
+    if(data.gender === persona.gender){
+        if(persona.img !== undefined) data.img = persona.img;
+        if(persona.biography !== undefined) data.biography = persona.biography;
+        if(persona.marital !== undefined) data.marital = persona.marital;
+        if(persona.goals !== undefined) data.goals = persona.goals;
+        if(persona.challenges !== undefined) data.challenges = persona.challenges;
+        if(persona.name !== undefined) data.name = persona.name;
     }
     
     return data;
