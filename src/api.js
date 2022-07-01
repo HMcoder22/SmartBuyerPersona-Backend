@@ -9,7 +9,7 @@ const {retrieveData} = require('./database_tools.js');
 require('dotenv').config();
 
 async function getData(state, job){
-    const uri = `mongodb+srv://${process.env.db_username}:${process.env.db_password}@hagosmarketing.8mru08u.mongodb.net/?retryWrites=true&w=majority`
+    const uri = `mongodb+srv://billtrancon12:LiamNgoan%40123@hagosmarketing.8mru08u.mongodb.net/?retryWrites=true&w=majority`
     // const uri = "mongodb+srv://billtrancon12:LiamNgoan%40123@testing.76czn3k.mongodb.net/?retryWrites=true&w=majority";
     const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
