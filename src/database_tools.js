@@ -50,7 +50,9 @@ module.exports.retrieveData = async function retrieveData(client, dbname, colnam
     return {
         statusCode: 200,
         headers:{
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET,HEAD,OPTIONS,POST,PUT,DELETE"
         },
         body: JSON.stringify(cursor)
     };
