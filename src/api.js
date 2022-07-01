@@ -15,7 +15,7 @@ async function getData(state, job){
 
     try{
         await client.connect();
-        const result = await retrieveData(client, "Persona", "Information", {state: state, "occupation.job": job});
+        const result = await retrieveData(client, "Persona", "Persona_detail", {state: state, "occupation.job": job});
         await client.close();
         return JSON.parse(result.body);
     }
