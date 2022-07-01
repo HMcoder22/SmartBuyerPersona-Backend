@@ -4,18 +4,19 @@ const app = express();
 var persona = {};
 const {retrieveData} = require('./database_tools.js');
 const {MongoClient} = require('mongodb');
+require('dotenv').config();
 
 app.use(cors());
 app.use(express.json({limit: '50mb'}));
 
 
 async function getData(state, job){
-    const uri = "mongodb+srv://billtrancon12:LiamNgoan%40123@testing.76czn3k.mongodb.net/?retryWrites=true&w=majority"
+    const uri = `mongodb+srv://${process.env.db_username}:${process.env.db_password}@hagosmarketing.8mru08u.mongodb.net/?retryWrites=true&w=majority`
     const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
     try{
         await client.connect();
-        const result = await retrieveData(client, "Persona", "Persona_detail", {state: state, "occupation.job": job});
+        const result = await retrieveData(client, "Persona", "Information", {state: state, "occupation.job": job});
         await client.close();
         return JSON.parse(result.body);
     }
