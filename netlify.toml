@@ -1,7 +1,7 @@
 [build]
   functions = "functions"
   environment = {
-    db_username = "billtrancon12"
+    db_username = "billtrancon12",
     db_password = "LiamNgoan%40123"
   }
 
