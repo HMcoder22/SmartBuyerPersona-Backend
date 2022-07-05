@@ -9,7 +9,7 @@ const {retrieveData} = require('./database_tools.js');
 require('dotenv').config();
 
 async function getData(state, job){
-    const uri = `mongodb+srv://billtrancon12:LiamNgoan%40123@hagosmarketing.8mru08u.mongodb.net/?retryWrites=true&w=majority`
+    const uri = `mongodb+srv://${db_username}:${db_password}@hagosmarketing.8mru08u.mongodb.net/?retryWrites=true&w=majority`
     // const uri = "mongodb+srv://billtrancon12:LiamNgoan%40123@testing.76czn3k.mongodb.net/?retryWrites=true&w=majority";
     const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
@@ -35,7 +35,6 @@ app.use(function (req, res, next) {
 });
 
 // Get data from '/' post request
-// https://splendorous-dieffenbachia-f3bbe0.netlify.app//.netlify/functions/api/copy_generator
 router.post("/",  async function(req, res){
     await getData(req.body.state, req.body.occupation).then(e => {persona = e}).catch(console.error);
     res.json(validateInput(req.body));
