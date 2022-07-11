@@ -26,7 +26,7 @@ async function getUserLoginInfo(email){
     }
 }
 
-app.post("/login/authentication", async function(req, res){
+router.post("/login/authentication", async function(req, res){
     var password = "";
     await getUserLoginInfo(req.body.email).then(res => {
         password = res.password;
