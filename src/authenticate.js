@@ -44,7 +44,7 @@ function passMatches(pass, target){
     else return JSON.stringify({result: 'failed'});
 }
 
-app.use(`/.netlify/functions/api/login/authentication`, router);
+app.use(`/.netlify/functions/authenticate/login/authentication`, router);
 
 module.exports = app;
 module.exports.handler = serverless(app);
