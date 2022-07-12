@@ -35,7 +35,10 @@ router.post("/login/authentication", async function(req, res){
     .catch(err => {
         console.log(err);
     })
-    res.json(await passMatches(password, req.body.password));
+    res.json();
+    // res.json(
+    //     await passMatches(password, req.body.password)
+    // );
 })
 
 async function passMatches(pass, target){
