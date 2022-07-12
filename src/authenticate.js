@@ -3,6 +3,7 @@ const serverless = require("serverless-http");
 const cors = require('cors');
 const app = express();
 const router = express.Router();
+const bcrypt = require('bcryptjs');
 const {retrieveData} = require('./database_tools.js');
 const {MongoClient} = require('mongodb');
 require('dotenv').config();
