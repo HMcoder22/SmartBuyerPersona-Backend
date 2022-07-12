@@ -2,8 +2,8 @@
   functions = "functions"
 
 [build.environment]
-  db_username = "billtrancon12"
-  db_password = "LiamNgoan%40123"  
+  DB_USERNAME = "billtrancon12"
+  DB_PASSWORD = "LiamNgoan%40123"  
 
 [dev]
   publish = "dist"

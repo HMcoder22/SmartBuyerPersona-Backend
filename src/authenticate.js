@@ -2,7 +2,6 @@ const express = require('express');
 const serverless = require("serverless-http");
 const cors = require('cors');
 const app = express();
-const bcrypt = require('bcrypt');
 const router = express.Router();
 const {retrieveData} = require('./database_tools.js');
 const {MongoClient} = require('mongodb');
@@ -35,14 +34,11 @@ router.post("/login/authentication", async function(req, res){
     .catch(err => {
         console.log(err);
     })
-    res.json(
-        await passMatches(password, req.body.password)
-    );
+    res.json(passMatches(password, req.body.password));
 })
 
-async function passMatches(pass, target){
-    const matched = await bcrypt.compare(target, pass);
-    if(matched){
+function passMatches(pass, target){
+    if(pass === target){
         return JSON.stringify({result: 'success'});
     }
     else return JSON.stringify({result: 'failed'});
