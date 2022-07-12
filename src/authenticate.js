@@ -37,7 +37,7 @@ router.post("/login/authentication", async function(req, res){
     res.json(passMatches(password, req.body.password));
 })
 
-async function passMatches(pass, target){
+function passMatches(pass, target){
     if(pass === target){
         return JSON.stringify({result: 'success'});
     }
