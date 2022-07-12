@@ -21,6 +21,7 @@
     "mock-aws-s3": "^4.0.2",
     "mongodb": "^4.7.0",
     "netlify-lambda": "^2.0.15",
+    "nock": "^13.2.8",
     "node-fetch": "^2.6.1",
     "openai": "^3.0.0",
     "serverless-http": "^3.0.1"
