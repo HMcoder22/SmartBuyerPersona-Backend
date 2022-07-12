@@ -29,12 +29,12 @@ async function getUserLoginInfo(email){
 
 router.post("/login/authentication", async function(req, res){
     var password = "";
-    await getUserLoginInfo(req.body.email).then(res => {
-        password = res.password;
-    })
-    .catch(err => {
-        console.log(err);
-    })
+    // await getUserLoginInfo(req.body.email).then(res => {
+    //     password = res.password;
+    // })
+    // .catch(err => {
+    //     console.log(err);
+    // })
     res.json();
     // res.json(
     //     await passMatches(password, req.body.password)
