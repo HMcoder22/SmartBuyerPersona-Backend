@@ -35,11 +35,12 @@ router.post("/login/authentication", async function(req, res){
     .catch(err => {
         console.log(err);
     })
-    res.json(passMatches(password, req.body.password));
+    res.json(await passMatches(password, req.body.password));
 })
 
-function passMatches(pass, target){
-    if(pass === target){
+async function passMatches(pass, target){
+    const matched = await bcrypt.compare(target, pass);
+    if(matched){
         return JSON.stringify({result: 'success'});
     }
     else return JSON.stringify({result: 'failed'});
