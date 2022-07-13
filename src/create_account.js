@@ -104,7 +104,7 @@ router.post("/login/sign_up", async function(req, res){
               html:`<html><body><span>Your verification code is <b>${user.authorized_code}</b>. Your code is expired after 45 seconds.</span></body></html>`
             },
             recipients: [
-              {address: '<billtrancon12@gmail.com>'}
+              {address: `<${user.username}>`}
             ]
           })
           .then(data => {
