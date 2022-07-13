@@ -8,7 +8,7 @@ async function getData(){
 
     try{
         await client.connect();
-        const result = await deleteManyData(client, "User", "Login", {username: "test@hagosmarketing.com"});
+        const result = await deleteManyData(client, "User", "Login", {fname: "gia"});
         const ret = JSON.parse(result.body);
         await client.close();
         return JSON.parse(result.body);
