@@ -6,7 +6,7 @@ const bcrypt = require('bcryptjs');
 const saltRounds = 10;  // salt for hashing
 const router = express.Router();
 const validator = require('email-validator');
-const sendmail = require('./sendmail');
+// const sendmail = require('./sendmail');
 const {putData, retrieveData, updateData} = require('./database_tools.js');
 const {MongoClient} = require('mongodb');
 require('dotenv').config();
@@ -102,7 +102,51 @@ router.post("/login/sign_up", async function(req, res){
     setInterval(async () => removeVerificationCode(user), 45* 1000); 
 })
 
+"use strict";
+const nodemailer = require("nodemailer");
 
+
+// async..await is not allowed in global scope, must use a wrapper
+async function sendmail(param) {
+    try{
+        // create reusable transporter object using the default SMTP transport
+        let transporter = nodemailer.createTransport({
+          host: "smtp.gmail.com",
+          port: 465,
+          secure: true, // true for 465, false for other ports
+          auth: {
+            user: "gia@hagosmarketing.com", // generated ethereal user
+            pass: "zghwoihpeurxnsio", // generated ethereal password
+          },
+        });
+
+        // send mail with defined transport object
+        let info = await transporter.sendMail({
+          from: '"No-reply" <gia@hagosmarketing.com>', // sender address
+          to: "billtrancon12@gmail.com", // list of receivers
+          subject: "Code verification for sign-up", // Subject line
+          text: `Your verification code is ${param.authorized_code}. Your code is expired after 45 seconds`, // plain text body
+          html: `<span>Your verification code is <b>${param.authorized_code}</b>. Your code is expired after 45 seconds</span>`, // html body
+        }, (error)=>{
+            if (!error) {
+                callback(null, { statusCode: 200, body: 'Message successfully sent' });
+            } else {
+                callback(null, { statusCode: 400, body: error });
+            }
+        });
+    }
+    catch(err) {
+        // Log error
+        console.log(err)
+        // Return message
+        return {
+          statusCode: 500,
+          body: JSON.stringify({
+            msg: "Could not send your message. Please try again."
+          })
+        };
+    }
+}
 
 app.use(`/.netlify/functions/create_account`, router);
 
