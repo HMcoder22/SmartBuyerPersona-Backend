@@ -10,12 +10,12 @@ require('dotenv').config();
 
 async function getData(state, job){
     const uri = `mongodb+srv://${process.env.db_username}:${process.env.db_password}@hagosmarketing.8mru08u.mongodb.net/?retryWrites=true&w=majority`
-    // const uri = "mongodb+srv://billtrancon12:LiamNgoan%40123@testing.76czn3k.mongodb.net/?retryWrites=true&w=majority";
-    const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+    const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });   // Create a client end-point
 
     try{
         await client.connect();
-        const result = await retrieveData(client, "Persona", "Information", {state: state, "occupation.job": job});
+        // Get a persona based on state and occupation
+        const result = await retrieveData(client, "Persona", "Information", {state: state, "occupation.job": job}); 
         await client.close();
         return JSON.parse(result.body);
     }
@@ -67,16 +67,19 @@ function validateInput(data){
         return data;
     }
 
+    // Check if the occupation in that state is available
     data.income = 0;
     if(persona !== null){
         data.income = persona.occupation.income;
     }
 
+    // Job in that state is not available
     if(data.income === 0){
         data.error = 'job_unavailable';
         return data;
     }
 
+    // Persona according to the gender
     if(data.gender === persona.gender){
         if(persona.img !== undefined) data.img = persona.img;
         if(persona.biography !== undefined) data.biography = persona.biography;

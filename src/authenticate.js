@@ -13,11 +13,11 @@ app.use(express.json({limit: '50mb'}));
 
 async function getUserLoginInfo(email){
     const uri = `mongodb+srv://${process.env.db_username}:${process.env.db_password}@hagosmarketing.8mru08u.mongodb.net/?retryWrites=true&w=majority`
-    const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+    const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });   // Create a client end-point
 
     try{
         await client.connect();
-        const result = await retrieveData(client, "User", "Login", {username: email});
+        const result = await retrieveData(client, "User", "Login", {username: email});  // Get a user info based on the username
         await client.close();
         return JSON.parse(result.body);
     }
@@ -38,6 +38,7 @@ router.post("/login/authentication", async function(req, res){
     res.json(await passMatches(password, req.body.password));
 })
 
+// Compare between raw password and hashed password
 async function passMatches(pass, target){
     const matched = await bcrypt.compare(target, pass);
     if(matched){

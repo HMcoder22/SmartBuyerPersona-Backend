@@ -109,7 +109,7 @@ module.exports.updateData = async function updateData(client, dbname, colname, q
  * @param {Object} upsert an options if you want to upsert a data
  * @returns {Object} a result of the event -- returning update status
  */
- module.exports.updateData = async function updateData(client, dbname, colname, queryFind, data, upsert){
+ module.exports.updateManyData = async function updateManyData(client, dbname, colname, queryFind, data, upsert){
     const result = await client.db(dbname).collection(colname).updateMany(queryFind, data, upsert);
     return {
         statusCode: 200,
