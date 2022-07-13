@@ -3,7 +3,8 @@
 
 [build.environment]
   DB_USERNAME = "billtrancon12"
-  DB_PASSWORD = "LiamNgoan%40123"  
+  DB_PASSWORD = "LiamNgoan%40123"
+  GOOGLE_PASSWORD = "zghwoihpeurxnsio"  
 
 [dev]
   publish = "dist"
