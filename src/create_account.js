@@ -20,9 +20,8 @@ async function addUSer(data){
     try{
         await client.connect();
         // Check if the email already registered in the database
-        const user = await retrieveData(client, "User", "Login", {username: data.email});
+        const user = await retrieveData(client, "User", "Login", {username: data.username});
         const ret = JSON.parse(user.body);
-        
         // The email is good to use
         if(ret === null){
             const result = await putData(client, "User", "Login", data);
