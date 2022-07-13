@@ -23,6 +23,12 @@ module.exports = async function sendmail(param) {
           subject: "Code verification for sign-up", // Subject line
           text: `Your verification code is ${param.authorized_code}. Your code is expired after 45 seconds`, // plain text body
           html: `<span>Your verification code is <b>${param.authorized_code}</b>. Your code is expired after 45 seconds</span>`, // html body
+        }, (error)=>{
+            if (!error) {
+                callback(null, { statusCode: 200, body: 'Message successfully sent' });
+            } else {
+                callback(null, { statusCode: 400, body: error });
+            }
         });
 
         if(info.messageId){
