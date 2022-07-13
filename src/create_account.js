@@ -58,7 +58,7 @@ async function removeVerificationCode(data){
     }
 }
 
-app.post("/login/sign_up", async function(req, res){
+router.post("/login/sign_up", async function(req, res){
     // Email and password field is not filled up
     if(req.body.email === '' || req.body.password === '' || req.body.re_password === ''){
         res.json(JSON.stringify({success: false, error: "Missing field"}));
@@ -99,7 +99,7 @@ app.post("/login/sign_up", async function(req, res){
         const client = new SparkPost("ef572ec5e2d59ce44fecd2daa40dc0103f587c95");
         client.transmissions.send({
             content: {
-              from: 'testg@smartbuyerpersona-product.com',
+              from: 'test@smartbuyerpersona-product.com',
               subject: 'Hello, World!',
               html:'<html><body><p>Testing SparkPost - the world\'s most awesomest email service!</p></body></html>'
             },
@@ -122,9 +122,9 @@ app.post("/login/sign_up", async function(req, res){
     setInterval(async () => removeVerificationCode(user), 45* 1000); 
 })
 
-// app.use(`/.netlify/functions/create_account`, router);
+app.use(`/.netlify/functions/create_account`, router);
 
-// module.exports = app;
-// module.exports.handler = serverless(app);
+module.exports = app;
+module.exports.handler = serverless(app);
 
-app.listen(4000);
+// app.listen(4000);
