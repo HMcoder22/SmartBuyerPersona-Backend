@@ -6,6 +6,7 @@ const bcrypt = require('bcryptjs');
 const saltRounds = 10;  // salt for hashing
 const router = express.Router();
 const validator = require('email-validator');
+const sendmail = require('sendmail')();
 const {putData, retrieveData} = require('./database_tools.js');
 const {MongoClient} = require('mongodb');
 require('dotenv').config();
