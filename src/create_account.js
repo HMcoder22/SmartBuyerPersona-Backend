@@ -96,10 +96,11 @@ router.post("/login/sign_up", async function(req, res){
         // sendmail({
         //     authorized_code: req.body.authorized_code
         // });
+        console.log("hi")
         const client = new SparkPost("ef572ec5e2d59ce44fecd2daa40dc0103f587c95");
         client.transmissions.send({
             content: {
-              from: 'test@smartbuyerpersona-product.com',
+              from: 'testg@smartbuyerpersona-product.com',
               subject: 'Hello, World!',
               html:'<html><body><p>Testing SparkPost - the world\'s most awesomest email service!</p></body></html>'
             },
