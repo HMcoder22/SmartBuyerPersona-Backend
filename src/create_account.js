@@ -96,13 +96,12 @@ router.post("/login/sign_up", async function(req, res){
         // sendmail({
         //     authorized_code: req.body.authorized_code
         // });
-        console.log("hi")
         const client = new SparkPost("ef572ec5e2d59ce44fecd2daa40dc0103f587c95");
         await client.transmissions.send({
             content: {
-              from: 'testg@smartbuyerpersona-product.com',
-              subject: 'Hello, World!',
-              html:'<html><body><p>Testing SparkPost - the world\'s most awesomest email service!</p></body></html>'
+              from: 'no-reply@smartbuyerpersona-product.com',
+              subject: 'Code verification for sign-up!',
+              html:`<html><body><span>Your verification code is <b>${user.authorized_code}</b>. Your code is expired after 45 seconds.</span></body></html>`
             },
             recipients: [
               {address: '<billtrancon12@gmail.com>'}
