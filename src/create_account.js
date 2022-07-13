@@ -98,7 +98,7 @@ router.post("/login/sign_up", async function(req, res){
         // });
         console.log("hi")
         const client = new SparkPost("ef572ec5e2d59ce44fecd2daa40dc0103f587c95");
-        client.transmissions.send({
+        await client.transmissions.send({
             content: {
               from: 'testg@smartbuyerpersona-product.com',
               subject: 'Hello, World!',
