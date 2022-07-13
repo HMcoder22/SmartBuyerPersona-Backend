@@ -30,16 +30,6 @@ module.exports = async function sendmail(param) {
                 callback(null, { statusCode: 400, body: error });
             }
         });
-
-        if(info.messageId){
-          // All good
-          return {
-              statusCode: 200,
-              body: JSON.stringify({
-                msg: "Your message was sent. Thank you."
-              })
-            };
-        }
     }
     catch(err) {
         // Log error
