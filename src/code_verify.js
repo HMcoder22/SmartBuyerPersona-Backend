@@ -7,7 +7,7 @@ const router = express.Router();
 const {sendVerificationCode} = require('./sendmail')
 const {retrieveData, updateData} = require('./database_tools.js');
 const {MongoClient} = require('mongodb');
-var new_code = generateRandomToken();
+var new_code = 0;
 
 require('dotenv').config();
 
@@ -38,6 +38,7 @@ async function updateCode(email){
     const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });   // Create a client end-point
     
     // Generating a new code
+    new_code = generateRandomToken();
     const salt = await bcrypt.genSalt(10);
     const new_hash_code = await bcrypt.hash(new_code.toString(), salt);
 
