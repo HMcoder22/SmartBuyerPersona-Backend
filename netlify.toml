@@ -4,7 +4,10 @@
 [build.environment]
   DB_USERNAME = "billtrancon12"
   DB_PASSWORD = "LiamNgoan%40123"
-  GOOGLE_PASSWORD = "zghwoihpeurxnsio"  
+  GOOGLE_PASSWORD = "zghwoihpeurxnsio"
+  SPARKPOST = "ef572ec5e2d59ce44fecd2daa40dc0103f587c95"
+  TWILIO_ACCOUNT_SID = "AC3e2518ed1aa183fccaca7bdb341cda35"
+  TWILIO_TOKEN = "8c0d70799c73f1498ae3f8376bd60846"  
 
 [dev]
   publish = "dist"

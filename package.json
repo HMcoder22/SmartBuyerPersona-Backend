@@ -27,7 +27,9 @@
     "nodemailer-smtp-transport": "^2.7.4",
     "openai": "^3.0.0",
     "serverless-http": "^3.0.1",
-    "sparkpost": "^2.1.4"
+    "sparkpost": "^2.1.4",
+    "twilio": "^3.79.0",
+    "validator": "^13.7.0"
   },
   "devDependencies": {
     "node-env-run": "^4.0.2"
