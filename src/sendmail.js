@@ -19,3 +19,29 @@ module.exports.sendVerificationCode = async function sendVerificationCode(param)
       console.log(err);
     });
 }
+
+module.exports.sendNewUserNotification = async function sendNewUserNotification(param){
+  const client = new SparkPost(process.env.SPARKPOST);
+  await client.transmissions.send({
+    content:{
+      from: "alert@smartbuyerpersona-product.com",
+      subject: `${param.fname} wants to joins!`,
+      html: `
+      <html>
+        <body>
+          <span>Full name: ${param.fname}</span><br></br>
+          <span>Business name: ${param.bname}</span><br></br>
+          <span>Email: ${param.email}</span><br></br>
+          <span>Phone number: ${param.phone}</span><br></br>
+        </body>
+      </html>`
+    },
+    recipients:[
+      {address: "info@smartbuyerpersona.com"}
+    ]
+  })
+  .catch(err => {
+    console.log("Something wrong!");
+    console.log(err);
+  })
+}

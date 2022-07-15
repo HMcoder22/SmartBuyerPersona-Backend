@@ -44,7 +44,7 @@ async function addUSer(data){
 router.post("/login/sign_up", async function(req, res){
     const err = [];
     // Email and password field is not filled up
-    if(req.body.email === '' || req.body.password === '' || req.body.re_password === ''){
+    if(req.body.email === '' || req.body.password === '' || req.body.re_password === '' || req.body.bname === '' || req.body.phone === ''){
         // res.json(JSON.stringify({success: false, error: "Missing field"}));
         // return;
         err.push("Missing field");
@@ -62,10 +62,24 @@ router.post("/login/sign_up", async function(req, res){
         err.push('Invalid email')
     }
 
-    if(!validator.isISO8601(req.body.birthdate)){
+    if(req.body.birthdate !== '' && !validator.isISO8601(req.body.birthdate)){
         // res.json(JSON.stringify({success: false, error: 'Invalid date'}));
         // return;
         err.push('Invalid date');
+    }
+
+    if(!validator.isMobilePhone(req.body.phone, 'en-US')){
+        err.push('Invalid phone number');
+    }
+
+    if(!validator.isStrongPassword(req.body.password, {
+        minLength: 12, 
+        minLowercase: 1,
+        minUppercase: 1, 
+        minNumbers: 1, 
+        minSymbols: 1
+    })){
+        err.push('Weak password');
     }
 
     // Check if there are any errors occur
@@ -83,7 +97,10 @@ router.post("/login/sign_up", async function(req, res){
         birthdate: req.body.birthdate,
         username : req.body.email,
         password: hash_password,
+        bname: req.body.bname,
+        phone: req.body.phone,
         verify: false,   // indicating that the user still needs to verify
+        access: false,
         authorized_code: {
             token: await bcrypt.hash(req.body.authorized_code.toString(), salt),   // verification code
             issued: new Date(),

@@ -4,7 +4,7 @@ const cors = require('cors');
 const app = express();
 const bcrypt = require('bcryptjs');
 const router = express.Router();
-const {sendVerificationCode} = require('./sendmail')
+const {sendVerificationCode, sendNewUserNotification} = require('./sendmail')
 const {retrieveData, updateData} = require('./database_tools.js');
 const {MongoClient} = require('mongodb');
 var new_code = 0;
@@ -44,7 +44,25 @@ async function updateCode(email){
 
     try{
         await client.connect();
-        const result = await updateData(client, "User", "Login", {username: email}, {$set: {authorized_code: {token: new_hash_code, issued: new Date()}}}, true);  // Get a user info based on the username
+        await updateData(client, "User", "Login", {username: email}, {$set: {authorized_code: {token: new_hash_code, issued: new Date()}}}, true);  // Get a user info based on the username
+        await client.close();
+        return {success: true, error: ''};
+    }
+    catch(err){
+        console.error(err);
+        return {success: false, error: 'update failed'};
+    }
+}
+
+// The account is verified
+async function isVerified(email){
+    // Create a connection point
+    const uri = `mongodb+srv://${process.env.db_username}:${process.env.db_password}@hagosmarketing.8mru08u.mongodb.net/?retryWrites=true&w=majority`
+    const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });   // Create a client end-point
+
+    try{
+        await client.connect();
+        await updateData(client, "User", "Login", {username: email}, {$set: {verify: true}, $unset: {authorized_code: 1}}, true);  // Get a user info based on the username
         await client.close();
         return {success: true, error: ''};
     }
@@ -61,15 +79,27 @@ router.post('/login/code_verify', async function(req, res){
     const issuedTime = new Date(user.authorized_code.issued);
     if(matched && currentTime - issuedTime <= 45000){
         res.json(JSON.stringify({success: true, error: ''}));
+        
+        await isVerified(req.body.username)
+        .catch(err => {
+            console.log(err)
+        });
+        
+        await sendNewUserNotification({
+            email: user.username,
+            fname: user.fname,  // User full name
+            bname: user.bname,  // User business name
+            phone: user.phone   // User phone number
+        })
         return;
     }
     
-    if(!matched){
-        res.json(JSON.stringify({success: false, error: 'Incorrect code'}))
+    if(matched && currentTime - issuedTime > 45000){
+        res.json(JSON.stringify({success: false, error: 'Expired code'}))
         return;
     }
     
-    res.json(JSON.stringify({success: false, error: 'Expired code'}));
+    res.json(JSON.stringify({success: false, error: 'Incorrect code'}));
 })
 
 router.post('/login/code_verify/resend_code', async function(req, res){
@@ -89,7 +119,8 @@ router.post('/login/code_verify/resend_code', async function(req, res){
         console.log(err);
         res.json(JSON.stringify({success: false, error: 'sending failed'}))
     })
-    res.json(JSON.stringify({success: true}))
+    res.json(JSON.stringify({success: true}));
+
 })
 
 function getRandomNumber(max){
@@ -102,14 +133,12 @@ function generateRandomToken(){
         token += getRandomNumber(10);
         token *= 10;
     }
-    return token;
+    return token + getRandomNumber(10);
 }
 
 app.use(`/.netlify/functions/code_verify`, router);
 
 module.exports = app;
 module.exports.handler = serverless(app);
-
-
 
 // app.listen(4001);
