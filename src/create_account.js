@@ -95,9 +95,12 @@ router.post("/login/sign_up", async function(req, res){
     await addUSer(user).then(res => {success = res.acknowledged; error = res.error});
 
     if(success){
-        sendVerificationCode({
+        await sendVerificationCode({
             authorized_code: req.body.authorized_code,
             username: user.username
+        })
+        .catch(err =>{
+            console.log(err);
         });
     }
     res.json(JSON.stringify({success: success, error: error}));
