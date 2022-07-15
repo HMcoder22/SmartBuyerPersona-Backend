@@ -62,7 +62,8 @@ async function isVerified(email){
 
     try{
         await client.connect();
-        await updateData(client, "User", "Login", {username: email}, {$set: {verify: true}, $unset: {authorized_code: 1}}, true);  // Get a user info based on the username
+        const result = await updateData(client, "User", "Login", {username: email}, {$set: {verify: true}, $unset: {authorized_code: 1}}, true);  // Get a user info based on the username
+        console.log(result);
         await client.close();
         return {success: true, error: ''};
     }
