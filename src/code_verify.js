@@ -78,9 +78,7 @@ router.post('/login/code_verify', async function(req, res){
     const matched = await bcrypt.compare(req.body.verified_code.toString(), user.authorized_code.token);
     const currentTime = new Date();
     const issuedTime = new Date(user.authorized_code.issued);
-    if(matched && currentTime - issuedTime <= 45000){
-        res.json(JSON.stringify({success: true, error: ''}));
-        
+    if(matched && currentTime - issuedTime <= 45000){        
         await isVerified(req.body.username)
         .catch(err => {
             console.log(err)
@@ -92,6 +90,11 @@ router.post('/login/code_verify', async function(req, res){
             bname: user.bname,  // User business name
             phone: user.phone   // User phone number
         })
+        .catch(err => {
+            console.log(err);
+        })
+
+        res.json(JSON.stringify({success: true, error: ''}));
         return;
     }
     
