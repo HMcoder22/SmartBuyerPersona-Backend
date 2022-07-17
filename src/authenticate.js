@@ -9,7 +9,7 @@ const {MongoClient} = require('mongodb');
 const { sendVerificationCode } = require('./sendmail.js');
 const { sendPhoneVerification } = require('./send_code_phone.js');
 var new_email_code = 0;
-var new_phone_code
+var new_phone_code = 0;
 require('dotenv').config();
 
 app.use(cors());
