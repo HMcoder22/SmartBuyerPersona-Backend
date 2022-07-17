@@ -10,6 +10,7 @@ const validator = require('validator');
 const {sendVerificationCode} = require('./sendmail');
 const {putData, retrieveData} = require('./database_tools.js');
 const {MongoClient} = require('mongodb');
+const { sendPhoneVerification } = require('./send_code_phone');
 require('dotenv').config();
 
 app.use(cors());
@@ -43,6 +44,8 @@ async function addUSer(data){
 
 router.post("/login/sign_up", async function(req, res){
     const err = [];
+    const email_code = generateRandomToken(10);
+    const phone_code = generateRandomToken(4);
     // Email and password field is not filled up
     if(req.body.email === '' || req.body.password === '' || req.body.re_password === '' || req.body.bname === '' || req.body.phone === ''){
         // res.json(JSON.stringify({success: false, error: "Missing field"}));
@@ -99,11 +102,16 @@ router.post("/login/sign_up", async function(req, res){
         password: hash_password,
         bname: req.body.bname,
         phone: req.body.phone,
+        job: req.body.job,
         verify: false,   // indicating that the user still needs to verify
         access: false,
-        authorized_code: {
-            token: await bcrypt.hash(req.body.authorized_code.toString(), salt),   // verification code
+        email_authorized_code: {
+            token: await bcrypt.hash(email_code.toString(), salt),   // verification code
             issued: new Date(),
+        },
+        phone_authorized_code:{
+            token: await bcrypt.hash(phone_code.toString(), salt),
+            issued: new Date()
         }
     };
 
@@ -113,16 +121,34 @@ router.post("/login/sign_up", async function(req, res){
 
     if(success){
         await sendVerificationCode({
-            authorized_code: req.body.authorized_code,
+            authorized_code: email_code,
             username: user.username
         })
         .catch(err =>{
             console.log(err);
         });
+
+        await sendPhoneVerification({
+            authorized_code: phone_code,
+            phone: req.body.phone
+        })
     }
     res.json(JSON.stringify({success: success, error: error}));
     
 })
+
+function getRandomNumber(max){
+    return Math.floor(Math.random() * max);
+}
+
+function generateRandomToken(max_length){
+    var token = 0;
+    for(let i = 1; i <= max_length; i++){
+        token += getRandomNumber(10);
+        token *= 10;
+    }
+    return token + getRandomNumber(10);
+}
 
 app.use(`/.netlify/functions/create_account`, router);
 

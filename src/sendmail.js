@@ -30,14 +30,15 @@ module.exports.sendNewUserNotification = async function sendNewUserNotification(
       <html>
         <body>
           <span>Full name: ${param.fname}</span><br></br>
+          <span>Job: ${param.job}</span><br></br>
           <span>Business name: ${param.bname}</span><br></br>
-          <span>Email: ${param.email}</span><br></br>
           <span>Phone number: ${param.phone}</span><br></br>
+          <span>Email: ${param.email}</span><br></br>
         </body>
       </html>`
     },
     recipients:[
-      {address: "info@smartbuyerpersona.com"}
+      {address: "billtrancon12@gmail.com"}
     ]
   })
   .catch(err => {

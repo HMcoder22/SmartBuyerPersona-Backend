@@ -7,7 +7,9 @@ const bcrypt = require('bcryptjs');
 const {retrieveData, updateData} = require('./database_tools.js');
 const {MongoClient} = require('mongodb');
 const { sendVerificationCode } = require('./sendmail.js');
-var new_code = 0;
+const { sendPhoneVerification } = require('./send_code_phone.js');
+var new_email_code = 0;
+var new_phone_code
 require('dotenv').config();
 
 app.use(cors());
@@ -31,18 +33,27 @@ async function getUserLoginInfo(email){
 
 // Update authorized code for that user
 async function updateCode(email){
+// Create a connection point
     // Create a connection point
     const uri = `mongodb+srv://${process.env.db_username}:${process.env.db_password}@hagosmarketing.8mru08u.mongodb.net/?retryWrites=true&w=majority`
     const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });   // Create a client end-point
     
     // Generating a new code
-    new_code = generateRandomToken();
+    new_email_code = generateRandomToken(10);
+    new_phone_code = generateRandomToken(4);
     const salt = await bcrypt.genSalt(10);
-    const new_hash_code = await bcrypt.hash(new_code.toString(), salt);
 
     try{
         await client.connect();
-        const result = await updateData(client, "User", "Login", {username: email}, {$set: {authorized_code: {token: new_hash_code, issued: new Date()}}}, true);  // Get a user info based on the username
+        await updateData(client, "User", "Login", {username: email}, {$set: {
+            email_authorized_code: {
+                token: await bcrypt.hash(new_email_code.toString(), salt), 
+                issued: new Date()
+            }, 
+            phone_authorized_code:{
+                token: await bcrypt.hash(new_phone_code.toString(), salt),
+                issued: new Date()
+            }}}, true);  // Get a user info based on the username
         await client.close();
         return {success: true, error: ''};
     }
@@ -54,25 +65,16 @@ async function updateCode(email){
 
 
 router.post("/login/authentication", async function(req, res){
-    var password = "";
-    var verified = false;
-    var access = false;
-    await getUserLoginInfo(req.body.email).then(res => {
-        if(res !== null){
-            password = res.password;
-            verified = res.verify;
-            access = res.access;
-        }
-    })
+    const user = await getUserLoginInfo(req.body.email)
     .catch(err => {
         console.log(err);
     })
 
     // Comparing entered password and password in the database
-    const matched = await bcrypt.compare(req.body.password, password);
+    const matched = await bcrypt.compare(req.body.password, user.password);
     
     // If the password is entered correctly and the account is verified -> success
-    if(matched && verified && access){
+    if(matched && user.verify && user.access){
         res.json(JSON.stringify({result: 'success', error: ''}));
         return;
     }
@@ -84,21 +86,33 @@ router.post("/login/authentication", async function(req, res){
     }
 
     // Not verified -> send a new code to verify
-    if(!verified){
-        // Not verified
-        res.json(JSON.stringify({result: 'failed', error: 'Not verified'}));
-
+    if(!user.verify){
         // Update a new code
         await updateCode(req.body.email)
         .catch(err => {
             console.log(err);
         })
 
-        // Resend a new code
+        // Resend a new email code
         await sendVerificationCode({
-            authorized_code: new_code,
-            username: req.body.email
+            authorized_code: new_email_code,
+            username: user.username
         })
+        .catch(err =>{
+            console.log(err);
+        })
+
+        // Resend a new phone code
+        await sendPhoneVerification({
+            authorized_code: new_phone_code,
+            phone: user.phone
+        })
+        .catch(err => {
+            console.log(err);
+        })
+
+        // Not verified
+        res.json(JSON.stringify({result: 'failed', error: 'Not verified'}));
         return;
     }
 
@@ -109,9 +123,9 @@ function getRandomNumber(max){
     return Math.floor(Math.random() * max);
 }
 
-function generateRandomToken(){
+function generateRandomToken(max_length){
     var token = 0;
-    for(let i = 0; i < 9; i++){
+    for(let i = 1; i <= max_length; i++){
         token += getRandomNumber(10);
         token *= 10;
     }
