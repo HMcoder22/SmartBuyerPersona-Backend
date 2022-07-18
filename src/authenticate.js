@@ -104,16 +104,7 @@ router.post("/login/authentication", async function(req, res){
     // Not verified -> send a new code to verify
     if(!user.verify){
         // Update a new code
-        await updateCode(req.body.email, true, true)
-        .catch(err => {
-            console.log(err);
-        })
-
-        // Resend a new phone code
-        await sendPhoneVerification({
-            authorized_code: new_phone_code,
-            phone: user.phone
-        })
+        await updateCode(req.body.email, true, false)
         .catch(err => {
             console.log(err);
         })

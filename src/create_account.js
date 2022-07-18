@@ -10,7 +10,6 @@ const validator = require('validator');
 const {sendVerificationCode} = require('./sendmail');
 const {putData, retrieveData} = require('./database_tools.js');
 const {MongoClient} = require('mongodb');
-const { sendPhoneVerification } = require('./send_code_phone');
 require('dotenv').config();
 
 app.use(cors());
@@ -45,7 +44,6 @@ async function addUSer(data){
 router.post("/login/sign_up", async function(req, res){
     const err = [];
     const email_code = generateRandomToken(10);
-    const phone_code = generateRandomToken(4);
     // Email and password field is not filled up
     if(req.body.email === '' || req.body.password === '' || req.body.re_password === '' || req.body.bname === '' || req.body.phone === ''){
         // res.json(JSON.stringify({success: false, error: "Missing field"}));
@@ -108,10 +106,6 @@ router.post("/login/sign_up", async function(req, res){
         email_authorized_code: {
             token: await bcrypt.hash(email_code.toString(), salt),   // verification code
             issued: new Date(),
-        },
-        phone_authorized_code:{
-            token: await bcrypt.hash(phone_code.toString(), salt),
-            issued: new Date()
         }
     };
 
@@ -120,18 +114,11 @@ router.post("/login/sign_up", async function(req, res){
     await addUSer(user).then(res => {success = res.acknowledged; error = res.error});
 
     if(success){
-        // await sendPhoneVerification({
-        //     authorized_code: phone_code,
-        //     phone: user.phone
-        // })
-        // .catch(err => {
-        //     console.log(err);
-        // })
-        
+        // Send authorization code for email
         await sendVerificationCode({
             authorized_code: email_code,
             username: user.username
-        })
+        }, "Code verification for sign-up!")
         .catch(err =>{
             console.log(err);
         });

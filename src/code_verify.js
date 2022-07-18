@@ -103,13 +103,11 @@ async function isVerified(email){
 // Verifying authorization code
 router.post('/login/code_verify', async function(req, res){
     const user = await getUserLoginInfo(req.body.username).catch(err => console.log(err));
-    const email_matched = await bcrypt.compare(req.body.email_verified_code.toString(), user.email_authorized_code.token).catch(err => console.log(err));
-    const phone_matched = await bcrypt.compare(req.body.phone_verified_code.toString(), user.phone_authorized_code.token).catch(err => console.log(err));
+    const matched = await bcrypt.compare(req.body.email_verified_code.toString(), user.email_authorized_code.token).catch(err => console.log(err));
     const currentTime = new Date();
-    const email_issuedTime = new Date(user.email_authorized_code.issued);
-    const phone_issuedTime = new Date(user.phone_authorized_code.issued)
+    const issuedTime = new Date(user.email_authorized_code.issued);
     
-    if(email_matched && phone_matched && currentTime - email_issuedTime <= 15 * 60 * 1000 && currentTime - phone_issuedTime <= 15 * 60 * 1000){        
+    if(matched && currentTime - issuedTime <= 15 * 60 * 1000){        
         await isVerified(req.body.username)
         .catch(err => {
             console.log(err)
@@ -135,14 +133,9 @@ router.post('/login/code_verify', async function(req, res){
     if(!email_matched){
         err.push("Unmatched email code");
     }
-    if(!phone_matched){
-        err.push("Unmatched phone code");
-    }
+
     if(email_matched && currentTime - email_issuedTime > 15 * 60 * 1000){
         err.push('Email code expired');
-    }
-    if(phone_matched && currentTime - phone_issuedTime > 15 * 60 * 1000){
-        err.push('Phone code expired');
     }
 
     res.json(JSON.stringify({success: false, error: err}))
