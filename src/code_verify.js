@@ -55,7 +55,7 @@ async function updateCode(email){
             phone_authorized_code:{
                 token: await bcrypt.hash(new_phone_code.toString(), salt),
                 issued: new Date()
-            }}}, true);  // Get a user info based on the username
+            }}}, false);  // Get a user info based on the username
         await client.close();
         return {success: true, error: ''};
     }
@@ -139,6 +139,15 @@ router.post('/login/code_verify/resend_code', async function(req, res){
         console.log(err);
         res.json(JSON.stringify({success: false, error: 'updating failed'}))
     });
+
+    // Resend the new phone code
+    await sendPhoneVerification({
+        authorized_code: new_phone_code,
+        phone: user.phone
+    })
+    .catch(err => {
+        console.log(err);
+    })
     
     // Resend the new email code
     await sendVerificationCode({
@@ -150,14 +159,7 @@ router.post('/login/code_verify/resend_code', async function(req, res){
         res.json(JSON.stringify({success: false, error: 'sending failed'}))
     })
 
-    // Resend the new phone code
-    await sendPhoneVerification({
-        authorized_code: new_phone_code,
-        phone: user.phone
-    })
-    .catch(err => {
-        console.log(err);
-    })
+
 
     // Successfully send
     res.json(JSON.stringify({success: true, error: ''}));

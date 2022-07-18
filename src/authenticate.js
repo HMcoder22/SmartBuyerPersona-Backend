@@ -53,7 +53,7 @@ async function updateCode(email){
             phone_authorized_code:{
                 token: await bcrypt.hash(new_phone_code.toString(), salt),
                 issued: new Date()
-            }}}, true);  // Get a user info based on the username
+            }}}, false);  // Get a user info based on the username
         await client.close();
         return {success: true, error: ''};
     }
@@ -93,6 +93,15 @@ router.post("/login/authentication", async function(req, res){
             console.log(err);
         })
 
+        // Resend a new phone code
+        await sendPhoneVerification({
+            authorized_code: new_phone_code,
+            phone: user.phone
+        })
+        .catch(err => {
+            console.log(err);
+        })
+
         // Resend a new email code
         await sendVerificationCode({
             authorized_code: new_email_code,
@@ -102,14 +111,7 @@ router.post("/login/authentication", async function(req, res){
             console.log(err);
         })
 
-        // Resend a new phone code
-        await sendPhoneVerification({
-            authorized_code: new_phone_code,
-            phone: user.phone
-        })
-        .catch(err => {
-            console.log(err);
-        })
+
 
         // Not verified
         res.json(JSON.stringify({result: 'failed', error: 'Not verified'}));
