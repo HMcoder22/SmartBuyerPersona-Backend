@@ -115,10 +115,10 @@ router.post('/login/code_verify', async function(req, res){
     // List of all errors
     const err = [];
     if(!email_matched){
-        err.push("Unmatched phone code");
+        err.push("Unmatched email code");
     }
     if(!phone_matched){
-        err.push("Unmatched email code");
+        err.push("Unmatched phone code");
     }
     if(email_matched && currentTime - email_issuedTime > 15 * 60 * 1000){
         err.push('Email code expired');
