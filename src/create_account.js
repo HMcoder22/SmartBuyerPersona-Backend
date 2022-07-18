@@ -130,7 +130,10 @@ router.post("/login/sign_up", async function(req, res){
 
         await sendPhoneVerification({
             authorized_code: phone_code,
-            phone: req.body.phone
+            phone: user.phone
+        })
+        .catch(err => {
+            console.log(err);
         })
     }
     res.json(JSON.stringify({success: success, error: error}));

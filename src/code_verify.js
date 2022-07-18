@@ -91,7 +91,7 @@ router.post('/login/code_verify', async function(req, res){
     const email_issuedTime = new Date(user.email_authorized_code.issued);
     const phone_issuedTime = new Date(user.phone_authorized_code.issued)
     
-    if(email_matched && phone_matched && currentTime - email_issuedTime <= 45000 && currentTime - phone_issuedTime <= 45000){        
+    if(email_matched && phone_matched && currentTime - email_issuedTime <= 15 * 60 * 1000 && currentTime - phone_issuedTime <= 15 * 60 * 1000){        
         await isVerified(req.body.username)
         .catch(err => {
             console.log(err)
@@ -120,10 +120,10 @@ router.post('/login/code_verify', async function(req, res){
     if(!phone_matched){
         err.push("Unmatched email code");
     }
-    if(email_matched && currentTime - email_issuedTime > 45000){
+    if(email_matched && currentTime - email_issuedTime > 15 * 60 * 1000){
         err.push('Email code expired');
     }
-    if(phone_matched && currentTime - phone_issuedTime > 45000){
+    if(phone_matched && currentTime - phone_issuedTime > 15 * 60 * 1000){
         err.push('Phone code expired');
     }
 

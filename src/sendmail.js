@@ -8,7 +8,7 @@ module.exports.sendVerificationCode = async function sendVerificationCode(param)
       content: {
         from: 'no-reply@smartbuyerpersona-product.com',
         subject: 'Code verification for sign-up!',
-        html:`<html><body><span>Your verification code is <b>${param.authorized_code}</b>. Your code is expired after 45 seconds.</span></body></html>`
+        html:`<html><body><span>Your verification code is <b>${param.authorized_code}</b>. Your code is expired after 15 minutes.</span></body></html>`
       },
       recipients: [
         {address: `<${param.username}>`}
