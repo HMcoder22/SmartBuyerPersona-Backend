@@ -120,13 +120,13 @@ router.post("/login/sign_up", async function(req, res){
     await addUSer(user).then(res => {success = res.acknowledged; error = res.error});
 
     if(success){
-        await sendPhoneVerification({
-            authorized_code: phone_code,
-            phone: user.phone
-        })
-        .catch(err => {
-            console.log(err);
-        })
+        // await sendPhoneVerification({
+        //     authorized_code: phone_code,
+        //     phone: user.phone
+        // })
+        // .catch(err => {
+        //     console.log(err);
+        // })
         
         await sendVerificationCode({
             authorized_code: email_code,

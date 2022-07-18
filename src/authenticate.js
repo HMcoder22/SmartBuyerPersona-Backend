@@ -31,29 +31,45 @@ async function getUserLoginInfo(email){
     }
 }
 
-// Update authorized code for that user
-async function updateCode(email){
-// Create a connection point
+/**
+ * 
+ * @param {String} email user's email 
+ * @param {Boolean} updateEmail flag for updating email authorization code
+ * @param {Boolean} updatePhone flag for updating phone authorization code
+ * @returns {Object} status of update
+ */
+ async function updateCode(email, updateEmail, updatePhone){
     // Create a connection point
     const uri = `mongodb+srv://${process.env.db_username}:${process.env.db_password}@hagosmarketing.8mru08u.mongodb.net/?retryWrites=true&w=majority`
     const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });   // Create a client end-point
     
     // Generating a new code
-    new_email_code = generateRandomToken(10);
-    new_phone_code = generateRandomToken(4);
+    if(updateEmail) new_email_code = generateRandomToken(10);
+    if(updatePhone) new_phone_code = generateRandomToken(4);
     const salt = await bcrypt.genSalt(10);
+
 
     try{
         await client.connect();
-        await updateData(client, "User", "Login", {username: email}, {$set: {
-            email_authorized_code: {
-                token: await bcrypt.hash(new_email_code.toString(), salt), 
-                issued: new Date()
-            }, 
-            phone_authorized_code:{
-                token: await bcrypt.hash(new_phone_code.toString(), salt),
-                issued: new Date()
-            }}}, false);  // Get a user info based on the username
+        
+        if(updateEmail){
+            await updateData(client, "User", "Login", {username: email}, {$set: {
+                email_authorized_code: {
+                    token: await bcrypt.hash(new_email_code.toString(), salt).catch(err => console.log(err)), 
+                    issued: new Date()
+                }}}, false)
+            .catch(err => console.log(err));
+        }
+
+        if(updatePhone){
+            await updateData(client, "User", "Login", {username: email}, {$set: {
+                phone_authorized_code: {
+                    token: await bcrypt.hash(new_phone_code.toString(), salt).catch(err => console.log(err)), 
+                    issued: new Date()
+                }}}, false)
+            .catch(err => console.log(err));
+        }
+        
         await client.close();
         return {success: true, error: ''};
     }
@@ -68,10 +84,10 @@ router.post("/login/authentication", async function(req, res){
     const user = await getUserLoginInfo(req.body.email)
     .catch(err => {
         console.log(err);
-    })
+    });
 
     // Comparing entered password and password in the database
-    const matched = await bcrypt.compare(req.body.password, user.password);
+    const matched = await bcrypt.compare(req.body.password, user.password).catch(err => console.log(err));
     
     // If the password is entered correctly and the account is verified -> success
     if(matched && user.verify && user.access){
@@ -88,7 +104,7 @@ router.post("/login/authentication", async function(req, res){
     // Not verified -> send a new code to verify
     if(!user.verify){
         // Update a new code
-        await updateCode(req.body.email)
+        await updateCode(req.body.email, true, true)
         .catch(err => {
             console.log(err);
         })
@@ -106,12 +122,10 @@ router.post("/login/authentication", async function(req, res){
         await sendVerificationCode({
             authorized_code: new_email_code,
             username: user.username
-        })
+        }, "Code verification for sign-up!")
         .catch(err =>{
             console.log(err);
         })
-
-
 
         // Not verified
         res.json(JSON.stringify({result: 'failed', error: 'Not verified'}));

@@ -2,12 +2,17 @@
 const SparkPost = require('sparkpost');
 
 // async..await is not allowed in global scope, must use a wrapper
-module.exports.sendVerificationCode = async function sendVerificationCode(param) {
+/**
+ * 
+ * @param {Object} param list of parameter requires param.username and param.authorized_code 
+ * @param {String} subject subject for the email
+ */
+module.exports.sendVerificationCode = async function sendVerificationCode(param, subject) {
   const client = new SparkPost(process.env.SPARKPOST);
   await client.transmissions.send({
       content: {
         from: 'no-reply@smartbuyerpersona-product.com',
-        subject: 'Code verification for sign-up!',
+        subject: `${subject}`,
         html:`<html><body><span>Your verification code is <b>${param.authorized_code}</b>. Your code is expired after 15 minutes.</span></body></html>`
       },
       recipients: [
@@ -20,6 +25,15 @@ module.exports.sendVerificationCode = async function sendVerificationCode(param)
     });
 }
 
+/**
+ * 
+ * @param {Object} param parameter requires the following fields:
+ * param.fname: string,
+ * param.job: string,
+ * param.bname (business name): string,
+ * param.phone: int,
+ * param.email: string
+ */
 module.exports.sendNewUserNotification = async function sendNewUserNotification(param){
   const client = new SparkPost(process.env.SPARKPOST);
   await client.transmissions.send({

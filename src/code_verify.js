@@ -3,6 +3,7 @@ const serverless = require("serverless-http");
 const cors = require('cors');
 const app = express();
 const bcrypt = require('bcryptjs');
+const validator = require('validator');
 const router = express.Router();
 const {sendVerificationCode, sendNewUserNotification} = require('./sendmail')
 const {retrieveData, updateData} = require('./database_tools.js');
@@ -33,29 +34,45 @@ async function getUserLoginInfo(email){
     }
 }
 
-// Update authorized code for that user
-async function updateCode(email){
+/**
+ * 
+ * @param {String} email user's email 
+ * @param {Boolean} updateEmail flag for updating email authorization code
+ * @param {Boolean} updatePhone flag for updating phone authorization code
+ * @returns {Object} status of update
+ */
+async function updateCode(email, updateEmail, updatePhone){
     // Create a connection point
     const uri = `mongodb+srv://${process.env.db_username}:${process.env.db_password}@hagosmarketing.8mru08u.mongodb.net/?retryWrites=true&w=majority`
     const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });   // Create a client end-point
     
     // Generating a new code
-    new_email_code = generateRandomToken(10);
-    new_phone_code = generateRandomToken(4);
+    if(updateEmail) new_email_code = generateRandomToken(10);
+    if(updatePhone) new_phone_code = generateRandomToken(4);
     const salt = await bcrypt.genSalt(10);
 
 
     try{
         await client.connect();
-        await updateData(client, "User", "Login", {username: email}, {$set: {
-            email_authorized_code: {
-                token: await bcrypt.hash(new_email_code.toString(), salt), 
-                issued: new Date()
-            }, 
-            phone_authorized_code:{
-                token: await bcrypt.hash(new_phone_code.toString(), salt),
-                issued: new Date()
-            }}}, false);  // Get a user info based on the username
+        
+        if(updateEmail){
+            await updateData(client, "User", "Login", {username: email}, {$set: {
+                email_authorized_code: {
+                    token: await bcrypt.hash(new_email_code.toString(), salt).catch(err => console.log(err)), 
+                    issued: new Date()
+                }}}, false)
+            .catch(err => console.log(err));
+        }
+
+        if(updatePhone){
+            await updateData(client, "User", "Login", {username: email}, {$set: {
+                phone_authorized_code: {
+                    token: await bcrypt.hash(new_phone_code.toString(), salt).catch(err => console.log(err)), 
+                    issued: new Date()
+                }}}, false)
+            .catch(err => console.log(err));
+        }
+        
         await client.close();
         return {success: true, error: ''};
     }
@@ -83,10 +100,11 @@ async function isVerified(email){
     }
 }
 
+// Verifying authorization code
 router.post('/login/code_verify', async function(req, res){
-    const user = await getUserLoginInfo(req.body.username);
-    const email_matched = await bcrypt.compare(req.body.email_verified_code.toString(), user.email_authorized_code.token);
-    const phone_matched = await bcrypt.compare(req.body.phone_verified_code.toString(), user.phone_authorized_code.token);
+    const user = await getUserLoginInfo(req.body.username).catch(err => console.log(err));
+    const email_matched = await bcrypt.compare(req.body.email_verified_code.toString(), user.email_authorized_code.token).catch(err => console.log(err));
+    const phone_matched = await bcrypt.compare(req.body.phone_verified_code.toString(), user.phone_authorized_code.token).catch(err => console.log(err));
     const currentTime = new Date();
     const email_issuedTime = new Date(user.email_authorized_code.issued);
     const phone_issuedTime = new Date(user.phone_authorized_code.issued)
@@ -130,11 +148,12 @@ router.post('/login/code_verify', async function(req, res){
     res.json(JSON.stringify({success: false, error: err}))
 })
 
+// Resend authorization code
 router.post('/login/code_verify/resend_code', async function(req, res){
-    const user = await getUserLoginInfo(req.body.username)
+    const user = await getUserLoginInfo(req.body.username).catch(err => console.log(err));
 
     //Update the authentication code
-    await updateCode(req.body.username)
+    await updateCode(req.body.username, true, true)
     .catch(err =>{
         console.log(err);
         res.json(JSON.stringify({success: false, error: 'updating failed'}))
@@ -153,18 +172,99 @@ router.post('/login/code_verify/resend_code', async function(req, res){
     await sendVerificationCode({
         authorized_code: new_email_code,
         username: req.body.username
-    })
+    }, "Code verification for sign-up!")
     .catch(err => {
         console.log(err);
         res.json(JSON.stringify({success: false, error: 'sending failed'}))
     })
 
+    // Successfully send
+    res.json(JSON.stringify({success: true, error: ''}));
 
+})
+
+
+// Forgot password
+router.post('/forgot_password/send_code', async function(req, res){
+    // Invalid email format
+    if(!validator.isEmail(req.body.email)){
+        res.json(JSON.stringify({success: false, error: 'Invalid email'}));
+        return;
+    }
+    
+    const user = await getUserLoginInfo(req.body.email).catch(err => console.log(err));
+    // User not found
+    if(user === null){
+        res.json(JSON.stringify({success: false, error: "Email not found!"}));
+        return;
+    }
+    
+    // Updating the email authorization code
+    await updateCode(req.body.email, true, false)
+    .catch(err => console.log(err));
+
+    // Resend the new email code
+    await sendVerificationCode({
+        authorized_code: new_email_code,
+        username: req.body.email
+    }, "Your email code verificaiton is here!")
+    .catch(err => {
+        console.log(err);
+        res.json(JSON.stringify({success: false, error: 'sending failed'}))
+    })
 
     // Successfully send
     res.json(JSON.stringify({success: true, error: ''}));
 
 })
+
+// Verifying authorization code
+router.post('/forgot_password/email_verify', async function(req, res){
+    const user = await getUserLoginInfo(req.body.email).catch(err => console.log(err));
+    const matched = await bcrypt.compare(req.body.email_verified_code.toString(), user.email_authorized_code.token).catch(err => console.log(err));
+    const currentTime = new Date();
+    const issuedTime = new Date(user.email_authorized_code.issued);
+    
+    // Matched authorization code and within 15 minutes
+    if(matched && currentTime - issuedTime <= 15 * 60 * 1000){        
+        res.json(JSON.stringify({success: true, error: ''}));
+        return;
+    }
+    
+    // List of errors
+    if(!matched){
+        res.json(JSON.stringify({success: false, error: 'Unmatched email code'}))
+        return;
+    }
+
+    res.json(JSON.stringify({success: false, error: 'Email code expired'}));
+})
+
+// Resend authorization code
+router.post('/forgot_password/email_verify/resend_code', async function(req, res){
+    const user = await getUserLoginInfo(req.body.email).catch(err => console.log(err));
+
+    //Update the authentication code
+    await updateCode(req.body.email, true, false)
+    .catch(err =>{
+        console.log(err);
+        res.json(JSON.stringify({success: false, error: 'updating failed'}))
+    });
+    
+    // Resend the new email code
+    await sendVerificationCode({
+        authorized_code: new_email_code,
+        username: req.body.email
+    }, "Your email code verificaiton is here!")
+    .catch(err => {
+        console.log(err);
+        res.json(JSON.stringify({success: false, error: 'sending failed'}))
+    })
+
+    // Successfully send
+    res.json(JSON.stringify({success: true, error: ''}));
+})
+
 
 function getRandomNumber(max){
     return Math.floor(Math.random() * max);
@@ -184,4 +284,4 @@ app.use(`/.netlify/functions/code_verify`, router);
 module.exports = app;
 module.exports.handler = serverless(app);
 
-// app.listen(4001);
+// app.listen(4000);
