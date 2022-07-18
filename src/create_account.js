@@ -135,9 +135,11 @@ router.post("/login/sign_up", async function(req, res){
         .catch(err => {
             console.log(err);
         })
+        res.json(JSON.stringify({success: success, error: error}));
+        return;
     }
     res.json(JSON.stringify({success: success, error: error}));
-    
+
 })
 
 function getRandomNumber(max){
