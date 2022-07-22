@@ -91,7 +91,7 @@ router.post("/login/authentication", async function(req, res){
     
     // If the password is entered correctly and the account is verified -> success
     if(matched && user.verify && user.access){
-        res.json(JSON.stringify({result: 'success', error: ''}));
+        res.json(JSON.stringify({result: 'success', admin: user.admin, error: ''}));
         return;
     }
 
