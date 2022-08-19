@@ -16,6 +16,8 @@ const uri = `mongodb+srv://${process.env.db_username}:${process.env.db_password}
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });   // Create a client end-point
 
 router.post("/manage/access", async function(req, res){
+    console.log(req.body);
+
     let validUser = true;
 
     try{
