@@ -14,7 +14,6 @@ require('dotenv').config();
 
 app.use(cors());
 app.use(express.json({limit: '50mb'}));
-
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT,DELETE");
