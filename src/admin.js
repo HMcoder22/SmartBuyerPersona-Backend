@@ -13,7 +13,7 @@ app.use(cors());
 app.use(express.json({limit: '50mb'}));
 
 const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@hagosmarketing.8mru08u.mongodb.net/?retryWrites=true&w=majority`
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });   // Create a client end-point
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 router.post("/manage/access", async function(req, res){
     console.log(req.body);
@@ -22,7 +22,7 @@ router.post("/manage/access", async function(req, res){
 
     try{
         await client.connect();
-        const result = await retrieveData(client, "User", "Login", {username: req.body.email});  // Get a user info based on the username
+        const result = await retrieveData(client, "User", "Login", {username: req.body.email});
         if (result.body === "null")
             validUser = false;
         await client.close();
@@ -40,11 +40,6 @@ router.post("/manage/access", async function(req, res){
     try{
         await client.connect();
 
-        //Very dangerous. Will put off for now.
-        // if(req.body.deleted){
-        //     await deleteData(client, "User", "Login", {username: req.body.email});
-        // }
-
         await updateData(client, "User", "Login", {username: req.body.email}, {$set: {
                 access: req.body.access}}, false)
             .catch(err => console.log(err));
@@ -56,12 +51,12 @@ router.post("/manage/access", async function(req, res){
         console.error(err);
         res.json(JSON.stringify({success: false, error: 'update failed'}));
     }
-})
+});
 
 async function getUsers() {
     try{
         await client.connect();
-        const result = await client.db("User").collection("Login").find().toArray()
+        const result = await client.db("User").collection("Login").find().toArray();
         await client.close();
         return JSON.stringify(result);
     }
@@ -73,11 +68,7 @@ async function getUsers() {
 
 router.get("/accounts/getusers", async function(req, res){
     res.send(await getUsers());
-})
+});
 
-app.use(`/.netlify/functions/admin`, router);
-
-module.exports = app;
-module.exports.handler = serverless(app);
-
-// app.listen(4002);
+// export the router
+module.exports = router;

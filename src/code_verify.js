@@ -274,7 +274,6 @@ function generateRandomToken(max_length){
 
 app.use(`/.netlify/functions/code_verify`, router);
 
-module.exports = app;
-module.exports.handler = serverless(app);
+module.exports = router;    // Export the router
 
 // app.listen(4000);

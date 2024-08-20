@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "./node_modules/.bin/netlify-lambda serve src",
-    "build": "./node_modules/.bin/netlify-lambda build src",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon src/index.js",
+    "build": "netlify-lambda build src",
+    "serve": "netlify-lambda serve src",
+    "deploy": "netlify deploy --prod"
   },
   "keywords": [],
   "author": "",
@@ -15,7 +16,7 @@
     "axios": "^1.1.3",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
-    "dotenv": "^16.0.1",
+    "dotenv": "^16.4.5",
     "email-validator": "^2.0.4",
     "express": "^4.18.1",
     "form-data": "^4.0.0",
@@ -26,6 +27,7 @@
     "node-fetch": "^2.6.1",
     "nodemailer": "^6.7.7",
     "nodemailer-smtp-transport": "^2.7.4",
+    "nodemon": "^3.1.4",
     "openai": "^3.0.0",
     "serverless-http": "^3.0.1",
     "sparkpost": "^2.1.4",

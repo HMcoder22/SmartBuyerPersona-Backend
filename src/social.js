@@ -59,7 +59,6 @@ router.get("/linkedindata", async function(req, res){
             'LinkedIn-Version': '202206',
             'Authorization': 'Bearer AQXGIFvikPcUyuaB0GqEj-NkVok2ajhK1qokMPocwDXcfO3qG8gTSZgVJ-RgSODhJ3FegyiLStyOa7_9f15U7U5PPtg1YBOL3Ae4sYiQxxJDVbYmeZzSaN_L99LKzmGyHm5mP2paK8UdBQaaHqRBK0qqlaD5nzh4W3u5u7nlqljie5bZlFRBXf3sCOQn8l23JM34OGIYgW2SjO4Hjl4v2nyKXSH99Tq_x8T9FH3gEh56x_2IX8dsKTmNQ6ttaAUIZbby2ppz7CiHzMw0qETa-92ICMmWcUI35ZntL0v-owrfvLK6CDE5Phcuyud-ulGp8rXFLOcdh3MIPu16c61ip1LhmvTUdA',
             'Cookie': 'lidc="b=OB55:s=O:r=O:a=O:p=O:g=2873:u=6:x=1:i=1667327870:t=1667409476:v=2:sig=AQFhccJieyWOfuvmcaWqb3LqdvjffWJ5"; bcookie="v=2&2e8c21d9-e82a-41cf-8bca-2c850e704a05"'
-
         }
     };
 

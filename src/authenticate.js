@@ -87,6 +87,7 @@ async function getUserLoginInfo(email){
 
 
 router.post("/login/authentication", async function(req, res){
+
     const user = await getUserLoginInfo(req.body.email)
     .catch(err => {
         console.log(err);
@@ -146,9 +147,6 @@ function generateRandomToken(max_length){
 }
 
 
-app.use(`/.netlify/functions/authenticate`, router);
+//app.use(`/.netlify/functions/authenticate`, router);
 
-module.exports = app;
-module.exports.handler = serverless(app);
-
-// app.listen(4002);
+module.exports = router;
