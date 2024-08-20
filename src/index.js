@@ -19,6 +19,8 @@ const code_verify = require('./code_verify');
 const copy_generator = require('./copy_generator');
 const create_account = require('./create_account');
 const reset_password = require('./reset_password');
+const retrieveData = require('./retrieveData');
+const social = require('./social');
 // Use routes
 app.use('/admin', admin);
 app.use('/authenticate', authenticate);
@@ -26,6 +28,8 @@ app.use('/code_verify', code_verify);
 app.use('/copy_generator', copy_generator);
 app.use('/create_account', create_account);
 app.use('/reset_password', reset_password);
+app.use('/retrieveData', retrieveData);
+app.use('/social', social);
 
 
 // Use environment variable for port

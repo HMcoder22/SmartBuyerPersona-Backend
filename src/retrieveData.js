@@ -44,9 +44,7 @@ router.post('/user', async function(req, res){
     }, error : ''}))
 })
 
-app.use(`/.netlify/functions/retrieveData`, router);
-
-module.exports = app;
+module.exports = router;
 module.exports.handler = serverless(app);
  
 // app.listen(4005);

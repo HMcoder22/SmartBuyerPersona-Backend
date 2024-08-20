@@ -126,7 +126,5 @@ router.get("/facebookdata", async function(req, res){
 })
 
 
-app.use(`/.netlify/functions/social`, router);
-
-module.exports = app;
+module.exports = router;
 module.exports.handler = serverless(app);
