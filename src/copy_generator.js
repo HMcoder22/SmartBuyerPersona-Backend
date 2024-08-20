@@ -107,10 +107,7 @@ router.post("/generator/hashtag", async function(req, res){
     }
 })
 
-app.use(`/.netlify/functions/copy_generator`, router);
 
-module.exports = app;
-module.exports.handler = serverless(app);
-
-// app.listen(4000);
+module.exports = router;
+// module.exports.handler = serverless(app);
 

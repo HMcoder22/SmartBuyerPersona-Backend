@@ -15,10 +15,15 @@ app.get('/', (req, res) => {
 // Import routes
 const admin = require('./admin');
 const authenticate = require('./authenticate');
+const code_verify = require('./code_verify');
+const copy_generator = require('./copy_generator');
 
 // Use routes
 app.use('/admin', admin);
 app.use('/authenticate', authenticate);
+app.use('/code_verify', code_verify);
+app.use('/copy_generator', copy_generator);
+
 
 // Use environment variable for port
 const port =  process.env.PORT || 3000;

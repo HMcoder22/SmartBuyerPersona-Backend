@@ -94,7 +94,7 @@ router.post("/login/authentication", async function(req, res){
     });
 
     // Comparing entered password and password in the database
-    const matched = await bcrypt.compare(req.body.password, user.password).catch(err => console.log(err));
+    const matched = await bcrypt.compare(req.body.password, user.password)
     
     // If the password is entered correctly and the account is verified -> success
     if(matched && user.verify && user.access){

@@ -275,5 +275,3 @@ function generateRandomToken(max_length){
 app.use(`/.netlify/functions/code_verify`, router);
 
 module.exports = router;    // Export the router
-
-// app.listen(4000);
