@@ -98,9 +98,9 @@ router.post('/reset', async function(req, res){
     res.json(JSON.stringify({success: true, error: ''}));
 })
 
-app.use(`/.netlify/functions/reset_password`, router);
+// app.use(`/.netlify/functions/reset_password`, router);
 
-module.exports = app;
+module.exports = router;
 module.exports.handler = serverless(app);
 
 // app.listen(4004);

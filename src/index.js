@@ -17,12 +17,15 @@ const admin = require('./admin');
 const authenticate = require('./authenticate');
 const code_verify = require('./code_verify');
 const copy_generator = require('./copy_generator');
-
+const create_account = require('./create_account');
+const reset_password = require('./reset_password');
 // Use routes
 app.use('/admin', admin);
 app.use('/authenticate', authenticate);
 app.use('/code_verify', code_verify);
 app.use('/copy_generator', copy_generator);
+app.use('/create_account', create_account);
+app.use('/reset_password', reset_password);
 
 
 // Use environment variable for port

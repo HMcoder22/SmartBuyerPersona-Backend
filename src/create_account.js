@@ -140,9 +140,9 @@ function generateRandomToken(max_length){
     return token + getRandomNumber(10);
 }
 
-app.use(`/.netlify/functions/create_account`, router);
+// app.use(`/.netlify/functions/create_account`, router);
 
-module.exports = app;
-module.exports.handler = serverless(app);
+module.exports = router;
+// module.exports.handler = serverless(app);
 
 // app.listen(4000);
