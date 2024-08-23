@@ -31,6 +31,7 @@
     "openai": "^3.0.0",
     "serverless-http": "^3.0.1",
     "sparkpost": "^2.1.4",
+    "stripe": "^16.8.0",
     "twilio": "^3.79.0",
     "validator": "^13.7.0"
   },

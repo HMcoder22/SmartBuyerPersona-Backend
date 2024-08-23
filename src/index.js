@@ -21,6 +21,8 @@ const create_account = require('./create_account');
 const reset_password = require('./reset_password');
 const retrieveData = require('./retrieveData');
 const social = require('./social');
+const StripePaymentGateway = require('./StripePaymentGateway');
+
 // Use routes
 app.use('/admin', admin);
 app.use('/authenticate', authenticate);
@@ -30,6 +32,8 @@ app.use('/create_account', create_account);
 app.use('/reset_password', reset_password);
 app.use('/retrieveData', retrieveData);
 app.use('/social', social);
+app.use('/StripePaymentGateway', StripePaymentGateway);
+
 
 
 // Use environment variable for port
