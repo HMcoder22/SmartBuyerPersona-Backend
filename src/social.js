@@ -84,7 +84,6 @@ router.get("/linkedindata", async function(req, res){
         });
 
     res.json(linkedin)
-
 })
 
 router.get("/facebookdata", async function(req, res){

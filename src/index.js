@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const serverless = require('serverless-http');
 
 const app = express();
 
@@ -34,11 +35,13 @@ app.use('/retrieveData', retrieveData);
 app.use('/social', social);
 app.use('/StripePaymentGateway', StripePaymentGateway);
 
-
-
-// Use environment variable for port
-const port =  process.env.PORT || 3000;
-
+// The original server logic is now commented out since we're using Netlify functions
+/*
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
+*/
+
+// Netlify Functions handler for serverless deployment
+module.exports.handler = serverless(app);

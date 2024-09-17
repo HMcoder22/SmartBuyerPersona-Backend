@@ -27,6 +27,7 @@ async function getUserLoginInfo(email){
 }
 
 router.post('/user', async function(req, res){
+    
     const user = await getUserLoginInfo(req.body.username).catch(err => console.log(err));
     
     if(user === null){
