@@ -1,5 +1,4 @@
 const express = require('express');
-const serverless = require("serverless-http");
 const cors = require('cors');
 const app = express();
 const bcrypt = require('bcryptjs');
@@ -41,51 +40,42 @@ async function addUSer(data){
     }
 }
 
-router.post("/login/sign_up", async function(req, res){
+
+// sign up
+// sign up
+router.post("/login/sign_up", async function(req, res) {
     const err = [];
     const email_code = generateRandomToken(10);
+    
     // Email and password field is not filled up
-    if(req.body.email === '' || req.body.password === '' || req.body.re_password === '' || req.body.bname === '' || req.body.phone === ''){
-        // res.json(JSON.stringify({success: false, error: "Missing field"}));
-        // return;
+    if (req.body.email === '' || req.body.password === '' || req.body.re_password === '' || req.body.bname === '') {
         err.push("Missing field");
     }
+    
     // The two passwords are not matched
-    if(req.body.password !== req.body.re_password){
-        // res.json(JSON.stringify({success: false, error: "Unmatched password"}))
-        // return;
-        err.push('Unmatched password')
+    if (req.body.password !== req.body.re_password) {
+        err.push('Unmatched password');
     }
+    
     // The email is not valid
-    if(!validator.isEmail(req.body.email)){
-        // res.json(JSON.stringify({success: false, error: "Invalid email"}))
-        // return;
-        err.push('Invalid email')
+    if (!validator.isEmail(req.body.email)) {
+        err.push('Invalid email');
     }
 
-    if(req.body.birthdate !== '' && !validator.isISO8601(req.body.birthdate)){
-        // res.json(JSON.stringify({success: false, error: 'Invalid date'}));
-        // return;
-        err.push('Invalid date');
-    }
-
-    if(!validator.isMobilePhone(req.body.phone, 'en-US')){
-        err.push('Invalid phone number');
-    }
-
-    if(!validator.isStrongPassword(req.body.password, {
+    // Validate password strength
+    if (!validator.isStrongPassword(req.body.password, {
         minLength: 12, 
         minLowercase: 1,
         minUppercase: 1, 
         minNumbers: 1, 
         minSymbols: 1
-    })){
+    })) {
         err.push('Weak password');
     }
 
-    // Check if there are any errors occur
-    if(err.length !== 0){
-        res.json(JSON.stringify({success: false, error: err}));
+    // Check if there are any errors
+    if (err.length !== 0) {
+        res.json({ success: false, error: err });
         return;
     }
 
@@ -93,39 +83,39 @@ router.post("/login/sign_up", async function(req, res){
     const salt = await bcrypt.genSalt(saltRounds);
     const hash_password = await bcrypt.hash(req.body.password, salt);
     
+    // Prepare user object
     var user = {
-        fname: req.body.fname,  // full name of the user
-        birthdate: req.body.birthdate,
-        username : req.body.email,
+        fname: req.body.fname,  // Full name of the user
+        username: req.body.email,
         password: hash_password,
         bname: req.body.bname,
-        phone: req.body.phone,
         job: req.body.job,
-        verify: false,   // indicating that the user still needs to verify
+        verify: false,   // User needs to verify
         access: false,
         email_authorized_code: {
-            token: await bcrypt.hash(email_code.toString(), salt),   // verification code
+            token: await bcrypt.hash(email_code.toString(), salt),   // Verification code
             issued: new Date(),
         }
     };
 
     var success = false;
     var error = "";
-    await addUSer(user).then(res => {success = res.acknowledged; error = res.error});
+    await addUSer(user).then(res => { success = res.acknowledged; error = res.error; });
 
-    if(success){
+    if (success) {
         // Send authorization code for email
         await sendVerificationCode({
             authorized_code: email_code,
             username: user.username
         }, "Code verification for sign-up!")
-        .catch(err =>{
+        .catch(err => {
             console.log(err);
         });
     }
-    res.json(JSON.stringify({success: success, error: error}));
+    
+    res.json({ success: success, error: error });
+});
 
-})
 
 function getRandomNumber(max){
     return Math.floor(Math.random() * max);

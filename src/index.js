@@ -22,6 +22,7 @@ const reset_password = require('./reset_password');
 const retrieveData = require('./retrieveData');
 const social = require('./social');
 const StripePaymentGateway = require('./StripePaymentGateway');
+const FlaskServer = require('./FlaskServer');
 
 // Use routes
 app.use('/admin', admin);
@@ -33,6 +34,8 @@ app.use('/reset_password', reset_password);
 app.use('/retrieveData', retrieveData);
 app.use('/social', social);
 app.use('/StripePaymentGateway', StripePaymentGateway);
+app.use('/FlaskServer', FlaskServer);
+
 
 
 
